@@ -2,17 +2,25 @@ import { RouteInfo } from './sidebar.metadata';
 
 export const ROUTES: RouteInfo[] = [
   {
+    path: '/updateInfo',
+    title: 'Home',
+    icon: ' ',
+    class: '',
+    extralink: false,
+    submenu: []
+  },
+  {
     path: '',
-    title: 'Personal',
+    title: 'Profile',
     icon: 'mdi mdi-dots-horizontal',
     class: 'nav-small-cap',
     extralink: true,
     submenu: []
   },
   {
-    path: '/starter',
-    title: 'Starter Page',
-    icon: 'icon-Files',
+    path: '/updateInfo',
+    title: 'Change Password',
+    icon: '',
     class: '',
     extralink: false,
     submenu: []
@@ -20,15 +28,15 @@ export const ROUTES: RouteInfo[] = [
   {
     path: '/updateInfo',
     title: 'Update info',
-    icon: 'icon-Files',
+    icon: '',
     class: '',
     extralink: false,
     submenu: []
   },
   {
-    path: '/startera',
+    path: '/logout',
     title: 'Logout',
-    icon: 'icon-Files',
+    icon: '',
     class: '',
     extralink: false,
     submenu: []
