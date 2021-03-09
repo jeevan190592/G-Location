@@ -25,8 +25,12 @@ export class LoginComponent implements OnInit {
   loginform = true;
   recoverform = false;
 
-  showRecoverForm() {
+  changeForm() {
     this.loginform = !this.loginform;
     this.recoverform = !this.recoverform;
+  }
+
+  searchForm() {
+    this.routes.navigate(['/search']);
   }
 }

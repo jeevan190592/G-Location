@@ -4,7 +4,7 @@
     min-height: 100vh;
     position: relative;
     .auth-box{
-        background: $white;
+        background: #d4e7b7;
         padding: 20px;
         box-shadow: $shadow;
         max-width: 400px;
@@ -23,8 +23,11 @@
     }
     
     #recoverform{
-        display: none;
-    }
+       display: none;
+     }
+  #searchform{
+    display: none;
+  }
     .auth-sidebar{
         position: fixed;
         height: 100%;

@@ -1,0 +1,42 @@
+<div class="auth-wrapper d-flex no-block justify-content-center align-items-center"
+     style="background:#021E07 no-repeat center center;">
+  <div>
+    <div class="auth-alert">
+      <div class="alert">
+      </div>
+    </div>
+    <div class="auth-box">
+      <div id="login">
+        <div class="logo">
+          <span class="db"><img src="assets/images/logo.png" alt="logo" width = "100%"/></span>
+        </div>
+        <!-- Form -->
+        <div class="row">
+          <div class="col-12">
+            <form class="form-horizontal m-t-20" id="loginform">
+              <div *ngIf="msg" class="alert alert-danger">{{ msg }}</div>
+              <div class="form-group ">
+                <div class="col-xs-12">
+                  <input class="form-control" type="text" required="" placeholder="Search here" #u1></div>
+              </div>
+
+              <div class="form-group text-center m-t-20">
+                <div class="col-xs-12">
+                  <button type="button" class="btn btn-info btn-lg btn-block text-uppercase"
+                          (click)="check(u1.value)">Search
+                  </button>
+                </div>
+              </div>
+
+              <div class="form-group m-b-0">
+                <div class="col-sm-12 text-center">
+                  <div>Login to a store? <a class="text-info m-l-5" [routerLink]="['/login']"><b>Login</b></a></div>
+                </div>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
