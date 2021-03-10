@@ -28,6 +28,7 @@ import { PERFECT_SCROLLBAR_CONFIG } from 'ngx-perfect-scrollbar';
 import { PerfectScrollbarConfigInterface } from 'ngx-perfect-scrollbar';
 import {SearchComponent} from './search/search.component';
 import { LogoutComponent } from './logout/logout.component';
+import {NgxDatatableModule} from '@swimlane/ngx-datatable';
 
 
 const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
@@ -50,17 +51,18 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
       SearchComponent,
       LogoutComponent
     ],
-    imports: [
-        CommonModule,
-        BrowserModule,
-        BrowserAnimationsModule,
-        FormsModule,
-        HttpClientModule,
-        NgbModule,
-        RouterModule.forRoot(Approutes, { useHash: false }),
-        PerfectScrollbarModule,
-        AgmCoreModule.forRoot({ apiKey: 'AIzaSyBUb3jDWJQ28vDJhuQZxkC0NXr_zycm8D0' })
-    ],
+  imports: [
+    CommonModule,
+    BrowserModule,
+    BrowserAnimationsModule,
+    FormsModule,
+    HttpClientModule,
+    NgbModule,
+    RouterModule.forRoot(Approutes, {useHash: false}),
+    PerfectScrollbarModule,
+    AgmCoreModule.forRoot({apiKey: 'AIzaSyBUb3jDWJQ28vDJhuQZxkC0NXr_zycm8D0'}),
+    NgxDatatableModule
+  ],
     providers: [
         {
             provide: PERFECT_SCROLLBAR_CONFIG,

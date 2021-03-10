@@ -18,6 +18,18 @@ export const Approutes: Routes = [
         loadChildren: () => import('./starter/starter.module').then(m => m.StarterModule)
       },
       {
+        path: 'product',
+        loadChildren: () => import('./product/product.module').then(m => m.ProductModule)
+      },
+      {
+        path: 'profile',
+        loadChildren: () => import('./profile/profile.module').then(m => m.ProfileModule)
+      },
+      {
+        path: 'gallery',
+        loadChildren: () => import('./gallery/gallery.module').then(m => m.GalleryModule)
+      },
+      {
         path: 'component',
         loadChildren: () => import('./component/component.module').then(m => m.ComponentsModule)
       }

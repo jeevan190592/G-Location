@@ -20,11 +20,11 @@ export class LoginComponent implements OnInit {
       if (res) {
         localStorage.setItem('username', res.name);
         console.log('Local storage - ' + localStorage.getItem('username'));
-        this.routes.navigate(['/starter']);
+        this.routes.navigate(['/product']);
       } else {
         this.msg = 'Invalid Username or Password';
       }}
-    )
+    );
 
   }
 
