@@ -4,7 +4,7 @@ export const ROUTES: RouteInfo[] = [
   {
     path: '/product',
     title: 'Home',
-    icon: ' ',
+    icon: 'icon-home',
     class: '',
     extralink: false,
     submenu: []
@@ -20,7 +20,7 @@ export const ROUTES: RouteInfo[] = [
   {
     path: '/profile',
     title: 'Profile',
-    icon: '',
+    icon: 'mdi mdi-dots-horizontal',
     class: '',
     extralink: false,
     submenu: []

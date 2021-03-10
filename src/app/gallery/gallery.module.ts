@@ -10,7 +10,7 @@ const routes: Routes = [
   {
     path: '',
     data: {
-      title: 'Product Details'
+      title: 'Store Gallery'
     },
     component: GalleryComponent
   }
