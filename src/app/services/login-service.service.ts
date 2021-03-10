@@ -1,21 +1,32 @@
 import { Injectable } from '@angular/core';
 import { HttpClient} from "@angular/common/http";
+import {userDetails} from "../models";
+import {Observable} from "rxjs";
+
+import { catchError, map } from 'rxjs/operators'
+
+
+const ApiHost: string = 'http://localhost:3000/api/'
+const LoginEndpoint: string = ApiHost + 'login'
+const RegisterEndpoint: string = ApiHost + 'register'
 
 @Injectable({
   providedIn: 'root'
 })
 export class LoginServiceService {
-
   constructor(private http: HttpClient) { }
 
 
-  login(username: string, password: string) {
+  register(username: string, password: string) {
     const requestBody = { user: username, email: password, id: 0 }
-    return this.http.post('http://localhost:3000/api/register', requestBody,
-      {responseType: 'text'})
+    return this.http.post(RegisterEndpoint, requestBody,{responseType: 'text'})
   }
 
-  logind(username: string, password: string) {
-    return this.http.get('/api/login')
+  login(username: string, password: string): Observable<userDetails> {
+    const requestBody = { username: username, password: password }
+    return this.http.post<userDetails[]>(LoginEndpoint, requestBody).pipe(
+      map((user: userDetails[]) => {
+          return user[0]
+      }))
   }
 }

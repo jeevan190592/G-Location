@@ -2,8 +2,16 @@ import { RouteInfo } from './sidebar.metadata';
 
 export const ROUTES: RouteInfo[] = [
   {
-    path: '/updateInfo',
+    path: '/starter',
     title: 'Home',
+    icon: ' ',
+    class: '',
+    extralink: false,
+    submenu: []
+  },
+  {
+    path: '/gallery',
+    title: 'Gallery',
     icon: ' ',
     class: '',
     extralink: false,

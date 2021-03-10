@@ -1,7 +1,8 @@
 import { Component, OnInit } from '@angular/core';
-import { RouterModule, Router } from '@angular/router';
+import { Router } from '@angular/router';
 import { MyserviceService } from './../myservice.service';
 import {LoginServiceService} from "../services/login-service.service";
+import {userDetails} from "../models";
 
 @Component({
   selector: 'app-login',
@@ -10,18 +11,20 @@ import {LoginServiceService} from "../services/login-service.service";
 })
 export class LoginComponent implements OnInit {
   msg = '';
-  constructor(private service: MyserviceService, private loginService: LoginServiceService, private routes: Router) { }
+  constructor(private loginService: LoginServiceService, private routes: Router) { }
 
   ngOnInit() {
   }
   check(uname: string, password: string) {
-    this.loginService.login(uname, password).subscribe((res) => {
+    this.loginService.login(uname, password).subscribe((res: userDetails) => {
       if (res) {
+        localStorage.setItem('username', res.name);
+        console.log('Local storage - ' + localStorage.getItem('username'));
         this.routes.navigate(['/starter']);
       } else {
         this.msg = 'Invalid Username or Password';
       }}
-    );
+    )
 
   }
 

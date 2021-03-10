@@ -1,8 +1,7 @@
 const express = require("express");
-
+var cors = require('cors')
 const Router = express.Router();
 const mySqlConnection = require("../connection");
-const authController = require('../controllers/auth')
 
 Router.get("/", (req, res)=>{
   mySqlConnection.query("SELECT * from users", (err, rows, fields)=>{
@@ -33,6 +32,36 @@ Router.delete("/:id", (req, res)=>{
     }
   })
 })
+
+
+Router.post("/logsin", (req, res)=>{
+  var body = req.body;
+  var sql = "SET @username = ?;SET @password = ?; CALL CheckLoginUser(@user,@email);";
+  mySqlConnection.query(sql,[body.username, body.password], (err, rows, fields)=>{
+    if(!err) {
+      res.send(rows);
+      /*rows.forEach(element => {
+        if(element.constructor == Array)
+          res.send('Inserted User ID :' +element[0].ID)
+      })*/
+    } else {
+      console.log('Error');
+    }
+  })
+})
+
+Router.post("/login", cors(), (req, res)=>{
+  var body = req.body;
+  console.log(body)
+  mySqlConnection.query('SELECT * from users where name = ? and binary password like ?',[body.username, body.password], (err, rows, fields)=>{
+    if(!err) {
+      res.send(rows);
+    } else {
+      console.log(err);
+    }
+  })
+})
+
 
 Router.post("/register", (req, res)=>{
   var body = req.body;

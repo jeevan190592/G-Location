@@ -27,6 +27,7 @@ import { PerfectScrollbarModule } from 'ngx-perfect-scrollbar';
 import { PERFECT_SCROLLBAR_CONFIG } from 'ngx-perfect-scrollbar';
 import { PerfectScrollbarConfigInterface } from 'ngx-perfect-scrollbar';
 import {SearchComponent} from './search/search.component';
+import { LogoutComponent } from './logout/logout.component';
 
 
 const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
@@ -46,7 +47,8 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
         BreadcrumbComponent,
         SidebarComponent,
         LoginComponent,
-      SearchComponent
+      SearchComponent,
+      LogoutComponent
     ],
     imports: [
         CommonModule,

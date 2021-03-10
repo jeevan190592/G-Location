@@ -9,4 +9,9 @@ export class StarterComponent implements AfterViewInit {
   }
 
   ngAfterViewInit() {}
+
+  logout() {
+    // remove user from local storage to log user out
+    localStorage.removeItem('username');
+  }
 }
