@@ -1,8 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { MyserviceService } from './../myservice.service';
-import {LoginServiceService} from "../services/login-service.service";
-import {userDetails} from "../models";
+import {LoginService} from "../services/login.service";
+import {UserDetails} from "../models";
 
 @Component({
   selector: 'app-login',
@@ -11,14 +11,15 @@ import {userDetails} from "../models";
 })
 export class LoginComponent implements OnInit {
   msg = '';
-  constructor(private loginService: LoginServiceService, private routes: Router) { }
+  constructor(private loginService: LoginService, private routes: Router) { }
 
   ngOnInit() {
   }
   check(uname: string, password: string) {
-    this.loginService.login(uname, password).subscribe((res: userDetails) => {
-      if (res) {
-        localStorage.setItem('username', res.name);
+    this.loginService.login(uname, password).subscribe((user: UserDetails) => {
+      if (user) {
+        localStorage.setItem('userID', user.id);
+        localStorage.setItem('username', user.name);
         console.log('Local storage - ' + localStorage.getItem('username'));
         this.routes.navigate(['/product']);
       } else {

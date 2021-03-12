@@ -5,7 +5,8 @@ import { Routes, RouterModule } from '@angular/router';
 
 import { ProductComponent } from './product.component';
 import {NgxDatatableModule} from '@swimlane/ngx-datatable';
-
+import {NgbModule} from '@ng-bootstrap/ng-bootstrap';
+import { NotifierModule } from 'angular-notifier';
 const routes: Routes = [
   {
     path: '',
@@ -17,7 +18,7 @@ const routes: Routes = [
 ];
 
 @NgModule({
-  imports: [FormsModule, CommonModule, RouterModule.forChild(routes), NgxDatatableModule],
+  imports: [FormsModule, CommonModule, RouterModule.forChild(routes), NgxDatatableModule, NgbModule, NotifierModule],
   declarations: [ProductComponent]
 })
 export class ProductModule {}
