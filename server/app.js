@@ -5,7 +5,7 @@ const multer  = require('multer')
 var cors = require('cors')
 var app = express();
 
-
+app.use(express.static(__dirname + '/uploads/'));
 
 app.use(bodyParser.json());
 app.use(cors())

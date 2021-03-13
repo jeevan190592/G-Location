@@ -12,10 +12,10 @@
                   <div class="col-md-12">
                     <form #formAddProduct>
                       <input type="text" class="form" placeholder="Product Name" name="p_name" #p_name> &nbsp;
-                      <input type="text" class="form" placeholder="Barcode" name="p_barcode" #p_barcode> &nbsp;
-                      <input type="text" class="form" placeholder="Weight" name="p_weight" #p_weight> &nbsp;
+                      <input type="number" class="form" placeholder="Barcode" name="p_barcode" #p_barcode> &nbsp;
+                      <input type="number" class="form" placeholder="Weight" name="p_weight" #p_weight> &nbsp;
                       <input type="text" class="form" placeholder="Location" name="p_location" #p_location> &nbsp;
-                      <input type="text" class="form" placeholder="Price" name="p_price" #p_price> &nbsp;
+                      <input type="number" class="form" placeholder="Price" name="p_price" #p_price> &nbsp;
                       <button class="btn btn-success"
                               (click)="addProduct(p_name.value, p_barcode.value, p_location.value, p_price.value, p_weight.value, formAddProduct)">
                         Add Product

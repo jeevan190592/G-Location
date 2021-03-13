@@ -3,6 +3,7 @@ var cors = require('cors')
 const Router = express.Router();
 const mySqlConnection = require("../connection");
 const multer = require('multer')
+const fs = require('fs');
 
 const storage = multer.diskStorage({
   destination: function (req, file, cb) {
@@ -139,9 +140,10 @@ Router.delete("/deleteProduct/:id/:storeid", (req, res) => {
   })
 })
 
-Router.delete("/deleteImage/:id/:storeid", (req, res) => {
+Router.delete("/deleteImage/:id/:storeid/:name", (req, res) => {
   mySqlConnection.query('DELETE from gallery where id =? and storeID =?', [req.params.id, req.params.storeid], (err, rows, fields) => {
     if (!err) {
+      fs.unlinkSync(`uploads/${req.params.name}`);
       res.send('success');
     } else {
       res.send('error');

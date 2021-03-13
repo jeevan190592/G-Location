@@ -4,12 +4,14 @@
     <div class="row">
       <div class="form-group">
         <div class="col-md-12">
-          <form [formGroup]="form" enctype="multipart/form-data" (ngSubmit)="onSubmit(title.value, descr.value)">
+          <form #addImageForm [formGroup]="form" enctype="multipart/form-data" (ngSubmit)="onSubmit(title.value, descr.value, addImageForm)">
             <input type="file" name="profile" (change)="onChange($event)" />
             <input type="text" class="form" placeholder="Title" name="titl" #title> &nbsp;
             <input type="text" class="form" placeholder="Description" name="desc" #descr> &nbsp;
             <button class="btn btn-success" type="submit">Upload image</button>
           </form>
+          <div *ngIf="successMessage" class="alert alert-success">{{ message }}</div>
+          <div *ngIf="failMessage" class="alert alert-danger">{{ message }}</div>
         </div>
       </div>
     </div>
@@ -19,11 +21,11 @@
       <div class="col-lg-3 col-md-6" *ngFor="let item of items">
         <!-- Card -->
         <div class="card">
-          <img class="card-img-top img-responsive" src="../../../server/uploads/{{item.filename}}" alt="Card image cap">
+          <img class="card-img-top img-responsive" src="http://localhost:3000/{{item.filename}}" alt="Card image cap">
           <div class="card-body">
             <h4 class="card-title">{{item.title}}</h4>
             <p class="card-text">{{item.description}}</p>
-            <button class="btn btn-danger" (click)="deleteImage(item.id)">Delete</button>
+            <button class="btn btn-danger" (click)="deleteImage(item.id, item.filename, item.title)">Delete</button>
           </div>
         </div>
         <!-- Card -->

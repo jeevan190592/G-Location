@@ -7,7 +7,6 @@ import {Products} from '../models';
 import {NotifierService} from 'angular-notifier';
 
 declare var require: any;
-const ddata: any = require('./company.json');
 let data: any;
 
 @Component({
@@ -17,7 +16,6 @@ let data: any;
 })
 export class ProductComponent implements OnInit {
   message = '';
-  p_name = '';
   failMessage = false;
   successMessage = false;
   private readonly notifier: NotifierService;
@@ -67,6 +65,16 @@ export class ProductComponent implements OnInit {
 
   updateValue(event, cell, rowIndex) {
     this.editing[rowIndex + '-' + cell] = false;
+    if (!event.target.value) {
+      alert('Cannot save empty fields')
+      return;
+    }
+    if (cell === 'weight' || cell === 'price' || cell === 'barcode') {
+      if (!(/^\d+$/.test(event.target.value))) {
+        alert('Please provide only numbers')
+        return;
+      }
+    }
     if (this.rows[rowIndex][cell] !== event.target.value) {
       console.log('inline editing rowIndex', rowIndex);
       this.editing[rowIndex + '-' + cell] = false;
@@ -108,7 +116,7 @@ export class ProductComponent implements OnInit {
         setTimeout(() => {
           this.failMessage = false;
           this.successMessage = false;
-        }, 4000);
+        }, 3000);
       });
     }
   }
@@ -127,7 +135,7 @@ export class ProductComponent implements OnInit {
         setTimeout(() => {
           this.failMessage = false;
           this.successMessage = false;
-        }, 4000);
+        }, 3000);
       });
     }
 

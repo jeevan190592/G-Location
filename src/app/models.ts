@@ -13,7 +13,7 @@ export class Products {
   id: string
   name: string
   weight: string
-  storeID: string
+  store_id: string
   barcode: string
   location: string
   created: string

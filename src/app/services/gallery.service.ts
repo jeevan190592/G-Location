@@ -21,8 +21,8 @@ export class GalleryService {
     return this.http.get<Gallery[]>(endPoint);
   }
 
-  deleteImage(storeID, imageID): Observable<string> {
-    const endPoint = DeleteImageEndpoint + '/' + imageID + '/' + storeID
+  deleteImage(storeID, imageID, name): Observable<string> {
+    const endPoint = DeleteImageEndpoint + '/' + imageID + '/' + storeID + '/' + name
     return this.http.delete(endPoint, {responseType: 'text'});
   }
 }

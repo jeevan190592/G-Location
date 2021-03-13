@@ -34,7 +34,7 @@ export class ProductService {
   }
 
   deleteProduct(product: Products): Observable<string> {
-    const deleteProduct = DeleteProductEndpoint + '/' + product.id + '/' + product.storeID
+    const deleteProduct = DeleteProductEndpoint + '/' + product.id + '/' + product.store_id
     console.log(deleteProduct)
     return this.http.delete(deleteProduct, {responseType: 'text'});
   }
