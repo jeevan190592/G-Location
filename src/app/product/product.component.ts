@@ -4,18 +4,24 @@ import {LoginService} from '../services/login.service';
 import {Router} from '@angular/router';
 import {ProductService} from '../services/product.service';
 import {Products} from '../models';
-import { NotifierService } from 'angular-notifier';
+import {NotifierService} from 'angular-notifier';
 
 declare var require: any;
 const ddata: any = require('./company.json');
 let data: any;
+
 @Component({
   selector: 'app-product',
   templateUrl: './product.component.html',
   styleUrls: ['./product.component.css']
 })
 export class ProductComponent implements OnInit {
+  message = '';
+  p_name = '';
+  failMessage = false;
+  successMessage = false;
   private readonly notifier: NotifierService;
+
   constructor(private productService: ProductService, notifierService: NotifierService) {
     this.notifier = notifierService;
     /*this.rows = data;
@@ -24,6 +30,7 @@ export class ProductComponent implements OnInit {
       this.loadingIndicator = false;
     }, 1500); */
   }
+
   editing = {};
   rows = [];
   temp = [...this.rows];
@@ -33,13 +40,14 @@ export class ProductComponent implements OnInit {
 
   // columns = [{ prop: 'name' }, { name: 'Gender' }, { name: 'Company' }];
 
-  @ViewChild(DatatableComponent, { static: false }) table: DatatableComponent;
+  @ViewChild(DatatableComponent, {static: false}) table: DatatableComponent;
+
   loadProducts() {
     this.productService.getProducts(localStorage.getItem('userID')).subscribe((products) => {
       this.rows = products;
       data = products;
       this.temp = [...data];
-      console.log(products);
+      this.table = data;
     });
   }
 
@@ -47,7 +55,7 @@ export class ProductComponent implements OnInit {
     const val = event.target.value.toLowerCase();
 
     // filter our data
-    const temp = this.temp.filter(function(d) {
+    const temp = this.temp.filter(function (d) {
       return d.name.toLowerCase().indexOf(val) !== -1 || !val;
     });
 
@@ -56,33 +64,75 @@ export class ProductComponent implements OnInit {
     // Whenever the filter changes, always go back to the first page
     this.table = data;
   }
+
   updateValue(event, cell, rowIndex) {
-    console.log('inline editing rowIndex', rowIndex);
     this.editing[rowIndex + '-' + cell] = false;
-    this.rows[rowIndex][cell] = event.target.value;
-    this.rows = [...this.rows];
-    this.updateProduct(this.rows[rowIndex]);
-    console.log('UPDATED!', this.rows[rowIndex][cell]);
+    if (this.rows[rowIndex][cell] !== event.target.value) {
+      console.log('inline editing rowIndex', rowIndex);
+      this.editing[rowIndex + '-' + cell] = false;
+      this.rows[rowIndex][cell] = event.target.value;
+      this.rows = [...this.rows];
+      this.updateProduct(this.rows[rowIndex]);
+      console.log('UPDATED!', this.rows[rowIndex][cell]);
+    }
   }
 
   updateProduct(product: Products) {
     this.productService.updateProduct(product).subscribe((result: string) => {
-      let message: string;
-      if (result = 'success') {
-        message = 'Product updated successfully';
+      if (result === 'success') {
+        this.successMessage = true;
+        this.message = 'Product updated successfully in database';
       } else {
-        message = 'Failed to update product';
-
+        this.failMessage = true;
+        this.message = 'Failed to update product in database';
       }
-      this.showNotification(result, message);
-      console.log(result);
+      setTimeout(() => {
+        this.failMessage = false;
+        this.successMessage = false;
+      }, 4000);
     });
   }
 
-  public showNotification( type: string, message: string ): void {
-    this.notifier.notify( type, message );
-    alert(message);
+  addProduct(name: string, barcode: string, location: string, price: string, weight: string, form: any) {
+    if (name && barcode && location && price && weight) {
+      this.productService.addProduct(name, barcode, location, price, weight).subscribe((result: string) => {
+        if (result === 'success') {
+          this.loadProducts();
+          this.successMessage = true;
+          this.message = 'Product added successfully in database';
+          form.reset();
+        } else {
+          this.failMessage = true;
+          this.message = 'Failed to add product in database';
+        }
+        setTimeout(() => {
+          this.failMessage = false;
+          this.successMessage = false;
+        }, 4000);
+      });
+    }
   }
+
+  deleteProduct(rowIndex) {
+    if (confirm('Are you sure to delete ' + this.rows[rowIndex].name)) {
+      this.productService.deleteProduct(this.rows[rowIndex]).subscribe((result: string) => {
+        if (result === 'success') {
+          this.loadProducts();
+          this.successMessage = true;
+          this.message = 'Product deleted successfully in database';
+        } else {
+          this.failMessage = true;
+          this.message = 'Failed to delete product in database';
+        }
+        setTimeout(() => {
+          this.failMessage = false;
+          this.successMessage = false;
+        }, 4000);
+      });
+    }
+
+  }
+
   ngOnInit(): void {
     this.loadProducts();
   }

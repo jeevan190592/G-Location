@@ -1,7 +1,7 @@
-import { Injectable } from '@angular/core';
+import {Injectable} from '@angular/core';
 import {Observable} from 'rxjs';
-import {Products} from '../models';
-import {ProductEndpoint, UpdateProductEndpoint} from '../constants';
+import {Products, UserDetails} from '../models';
+import {AddProductEndpoint, DeleteProductEndpoint, LoginEndpoint, ProductEndpoint, UpdateProductEndpoint} from '../constants';
 import {map} from 'rxjs/operators';
 import {HttpClient} from '@angular/common/http';
 
@@ -10,10 +10,11 @@ import {HttpClient} from '@angular/common/http';
 })
 export class ProductService {
 
-  constructor(private http: HttpClient) { }
+  constructor(private http: HttpClient) {
+  }
 
   getProducts(userID: string): Observable<Products[]> {
-    const requestBody = { username: userID }
+    const requestBody = {username: userID};
     return this.http.get<Products[]>(ProductEndpoint).pipe(
       map((product: Products[]) => {
         return product;
@@ -21,7 +22,20 @@ export class ProductService {
   }
 
   updateProduct(product: Products): Observable<string> {
-    const requestBody = { product: product }
+    const requestBody = {product: product};
     return this.http.put(UpdateProductEndpoint, requestBody, {responseType: 'text'});
+  }
+
+  addProduct(name: string, barcode: string, location: string, price: string, weight: string): Observable<string> {
+    const requestBody = {
+      name: name, barcode: barcode, store_id: localStorage.getItem('storeID'), location: location, price: price, weight: weight
+    };
+    return this.http.post(AddProductEndpoint, requestBody, {responseType: 'text'});
+  }
+
+  deleteProduct(product: Products): Observable<string> {
+    const deleteProduct = DeleteProductEndpoint + '/' + product.id + '/' + product.storeID
+    console.log(deleteProduct)
+    return this.http.delete(deleteProduct, {responseType: 'text'});
   }
 }

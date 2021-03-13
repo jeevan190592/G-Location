@@ -1,8 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { MyserviceService } from './../myservice.service';
-import {LoginService} from "../services/login.service";
-import {UserDetails} from "../models";
+import {LoginService} from '../services/login.service';
+import {UserDetails} from '../models';
 
 @Component({
   selector: 'app-login',
@@ -20,7 +20,9 @@ export class LoginComponent implements OnInit {
       if (user) {
         localStorage.setItem('userID', user.id);
         localStorage.setItem('username', user.name);
+        localStorage.setItem('storeID', user.storeID);
         console.log('Local storage - ' + localStorage.getItem('username'));
+        console.log('Local storage - ' + localStorage.getItem('storeID'));
         this.routes.navigate(['/product']);
       } else {
         this.msg = 'Invalid Username or Password';
