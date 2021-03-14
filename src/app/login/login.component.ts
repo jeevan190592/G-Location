@@ -18,9 +18,12 @@ export class LoginComponent implements OnInit {
   check(uname: string, password: string) {
     this.loginService.login(uname, password).subscribe((user: UserDetails) => {
       if (user) {
-        localStorage.setItem('userID', user.id);
+        localStorage.setItem('userID', user.userID);
         localStorage.setItem('username', user.name);
+        localStorage.setItem('email', user.email);
+        localStorage.setItem('phoneno', user.phoneno);
         localStorage.setItem('storeID', user.storeID);
+        localStorage.setItem('role', user.role);
         console.log('Local storage - ' + localStorage.getItem('username'));
         console.log('Local storage - ' + localStorage.getItem('storeID'));
         this.routes.navigate(['/product']);

@@ -1,11 +1,27 @@
 export class UserDetails {
   id: string
+  userID: string
   created: string
   updated: string
   name: string
   email: string
   password: string;
   storeID: string;
+  phoneno: string;
+  role: string;
+}
+
+export class StoreDetails {
+  id: string
+  created: string
+  updated: string
+  name: string
+  pincode: string
+  phoneno: string
+  address: string;
+  facebookURL: string;
+  twitterURL: string;
+  youtubeURL: string
 }
 
 

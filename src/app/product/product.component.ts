@@ -20,8 +20,7 @@ export class ProductComponent implements OnInit {
   successMessage = false;
   private readonly notifier: NotifierService;
 
-  constructor(private productService: ProductService, notifierService: NotifierService) {
-    this.notifier = notifierService;
+  constructor(private productService: ProductService) {
     /*this.rows = data;
     this.temp = [...data];
     setTimeout(() => {

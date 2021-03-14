@@ -9,32 +9,32 @@
 
         <ngb-tab title="Profile">
           <ng-template ngbTabContent>
-            <div class="card-body">
+            <div class="card-body" *ngIf="user && store">
               <div class="m-t-30 text-center">
                 <img src="assets/images/users/5.jpg" class="rounded-circle" width="150"/>
-                <h4 class="card-title m-t-10">Hanna Gover</h4>
-                <h6 class="card-subtitle">Accoubts Manager Amix corp</h6>
+                <h4 class="card-title m-t-10">{{user.name}}</h4>
+                <h6 class="card-subtitle">{{user.role}} - {{store.name}}</h6>
 
               </div>
             </div>
             <div>
               <hr>
             </div>
-            <div class="row">
+            <div class="row" *ngIf="user">
               <div class="col-md-3 col-xs-6 b-r" style="padding-left: 20px;">
                 <strong>Full Name</strong>
                 <br>
-                <p class="text-muted">Johnathan Deo</p>
+                <p class="text-muted">{{user.name}}</p>
               </div>
               <div class="col-md-3 col-xs-6 b-r">
                 <strong>Mobile</strong>
                 <br>
-                <p class="text-muted">(123) 456 7890</p>
+                <p class="text-muted">{{user.phoneno}}</p>
               </div>
               <div class="col-md-3 col-xs-6 b-r">
                 <strong>Email</strong>
                 <br>
-                <p class="text-muted">johnathan@admin.com</p>
+                <p class="text-muted">{{user.email}}</p>
               </div>
               <div class="col-md-3 col-xs-6">
                 <strong>Location</strong>
@@ -61,69 +61,95 @@
         </ngb-tab>
         <ngb-tab title="Update details">
           <ng-template ngbTabContent>
-            <div class="card-body">
+            <div class="card-body" *ngIf="user">
               <form class="form-horizontal form-material">
                 <div class="form-group">
                   <label class="col-md-12">Full Name</label>
                   <div class="col-md-12">
-                    <input type="text" placeholder="Johnathan Doe" class="form-control form-control-line">
+                    <input type="text" placeholder="Johnathan Doe" value="{{user.name}}" class="form-control form-control-line" #userName>
                   </div>
                 </div>
                 <div class="form-group">
                   <label for="example-email" class="col-md-12">Email</label>
                   <div class="col-md-12">
-                    <input type="email" placeholder="johnathan@admin.com" class="form-control form-control-line"
-                           name="example-email" id="exampsle-email">
+                    <input type="email" placeholder="johnathan@admin.com" value="{{user.email}}" class="form-control form-control-line"
+                           name="example-email" id="exampsle-email" #userEmail>
                   </div>
                 </div>
 
                 <div class="form-group">
                   <label class="col-md-12">Phone No</label>
                   <div class="col-md-12">
-                    <input type="text" placeholder="123 456 7890" class="form-control form-control-line">
+                    <input type="text" placeholder="123 456 7890" value="{{user.phoneno}}" class="form-control form-control-line" #userPhoneno>
+                  </div>
+                </div>
+                <div class="form-group">
+                  <div class="col-sm-12">
+                    <button class="btn btn-success" (click)="updateUserDetails(userName.value, userEmail.value, userPhoneno.value)">Update</button>
+                  </div>
+                </div>
+                <div *ngIf="successMessage" class="alert alert-success">{{ message }}</div>
+                <div *ngIf="failMessage" class="alert alert-danger">{{ message }}</div>
+              </form>
+            </div>
+          </ng-template>
+        </ngb-tab>
+        <ngb-tab title="Store details">
+          <ng-template ngbTabContent>
+            <div class="card-body" *ngIf="store">
+              <form class="form-horizontal form-material">
+                <div class="form-group">
+                  <label class="col-md-12">Store Name</label>
+                  <div class="col-md-12">
+                    <input type="text" placeholder="Johnathan Doe" value="{{store.name}}" class="form-control form-control-line" #storeName>
+                  </div>
+                </div>
+
+                <div class="form-group">
+                  <label class="col-md-12">Pincode</label>
+                  <div class="col-md-12">
+                    <input type="text" placeholder="123 456 7890" value="{{store.pincode}}" class="form-control form-control-line" #storepincode>
+                  </div>
+                </div>
+
+                <div class="form-group">
+                  <label class="col-md-12">Pincode</label>
+                  <div class="col-md-12">
+                    <input type="text" placeholder="123 456 7890" value="{{store.phoneno}}" class="form-control form-control-line" #storePhoneno>
+                  </div>
+                </div>
+
+                <div class="form-group">
+                  <label class="col-md-12">Address</label>
+                  <div class="col-md-12">
+                    <textarea rows="5" class="form-control form-control-line" #storeAddress> {{store.address}}</textarea>
                   </div>
                 </div>
                 <div class="form-group">
                   <label class="col-md-12">Facebook URL</label>
                   <div class="col-md-12">
-                    <input type="text" placeholder="123 456 7890" class="form-control form-control-line">
+                    <input type="text" placeholder="123 456 7890"  value="{{store.facebookURL}}"class="form-control form-control-line" #storeFB>
                   </div>
                 </div>
                 <div class="form-group">
                   <label class="col-md-12">Twitter URL</label>
                   <div class="col-md-12">
-                    <input type="text" placeholder="123 456 7890" class="form-control form-control-line">
+                    <input type="text" placeholder="123 456 7890"  value="{{store.twitterURL}}"class="form-control form-control-line" #storeTW>
                   </div>
                 </div>
                 <div class="form-group">
                   <label class="col-md-12">Youtube URL</label>
                   <div class="col-md-12">
-                    <input type="text" placeholder="123 456 7890" class="form-control form-control-line">
-                  </div>
-                </div>
-                <div class="form-group">
-                  <label class="col-md-12">Message</label>
-                  <div class="col-md-12">
-                    <textarea rows="5" class="form-control form-control-line"></textarea>
-                  </div>
-                </div>
-                <div class="form-group">
-                  <label class="col-sm-12">Select Country</label>
-                  <div class="col-sm-12">
-                    <select class="form-control form-control-line">
-                      <option>London</option>
-                      <option>India</option>
-                      <option>Usa</option>
-                      <option>Canada</option>
-                      <option>Thailand</option>
-                    </select>
+                    <input type="text" placeholder="123 456 7890"  value="{{store.youtubeURL}}"class="form-control form-control-line" #storeYT>
                   </div>
                 </div>
                 <div class="form-group">
                   <div class="col-sm-12">
-                    <button class="btn btn-success">Update Profile</button>
+                    <button class="btn btn-success" (click)="updateStoreDetails(storeName.value, storepincode.value, storePhoneno.value, storeAddress.value, storeFB.value, storeTW.value, storeYT.value)">Update</button>
                   </div>
                 </div>
+                <div *ngIf="successMessage" class="alert alert-success">{{ message }}</div>
+                <div *ngIf="failMessage" class="alert alert-danger">{{ message }}</div>
               </form>
             </div>
           </ng-template>

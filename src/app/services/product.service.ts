@@ -1,6 +1,6 @@
 import {Injectable} from '@angular/core';
 import {Observable} from 'rxjs';
-import {Products, UserDetails} from '../models';
+import {Products} from '../models';
 import {AddProductEndpoint, DeleteProductEndpoint, LoginEndpoint, ProductEndpoint, UpdateProductEndpoint} from '../constants';
 import {map} from 'rxjs/operators';
 import {HttpClient} from '@angular/common/http';

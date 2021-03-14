@@ -20,7 +20,7 @@ export const ROUTES: RouteInfo[] = [
   {
     path: '/profile',
     title: 'Profile',
-    icon: 'mdi mdi-dots-horizontal',
+    icon: '',
     class: '',
     extralink: false,
     submenu: []

@@ -12,6 +12,7 @@ declare var $: any;
 export class SidebarComponent implements OnInit {
   showMenu = '';
   showSubMenu = '';
+  name;
   public sidebarnavItems: any[];
   // this is for the open close
   addExpandClass(element: any) {
@@ -37,6 +38,7 @@ export class SidebarComponent implements OnInit {
 
   // End open close
   ngOnInit() {
+    this.name = localStorage.getItem('username')
     this.sidebarnavItems = ROUTES.filter(sidebarnavItem => sidebarnavItem);
   }
 }
