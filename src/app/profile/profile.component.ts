@@ -1,46 +1,82 @@
-import {Component, OnInit} from '@angular/core';
-import {StoreDetails, UserDetails} from '../models';
+import {Component, OnInit, ViewChild} from '@angular/core';
+import {Products, StoreDetails, UserDetails} from '../models';
 import {ProductService} from '../services/product.service';
 import {UserService} from '../services/user.service';
 import {LoginService} from '../services/login.service';
 import {Router} from '@angular/router';
+import {DatatableComponent} from '@swimlane/ngx-datatable';
+
+let data: any;
 
 @Component({
   templateUrl: 'profile.component.html'
 })
 export class ProfileComponent implements OnInit {
-  user: UserDetails
-  store: StoreDetails
+  user: UserDetails;
+  store: StoreDetails;
+  stores: StoreDetails[];
   message = '';
   failMessage = false;
   successMessage = false;
-  loggedUserID: string
-  storeID: string
-  constructor(private userService: UserService, private routes: Router) {}
+  loggedUserName: string;
+  loggedUserID: string;
+  storeID: string;
+  newUserStoreSelected: string;
+  newUserRoleSelected: string;
+  isAdmin: boolean
+
+  constructor(private userService: UserService, private routes: Router) {
+  }
+
+  editing = {};
+  userRows = [];
+  temp = [...this.userRows];
+
+  @ViewChild(DatatableComponent, {static: false}) table: DatatableComponent;
 
   ngOnInit(): void {
-    this.loggedUserID = localStorage.getItem('userID')
-    this.storeID = localStorage.getItem('storeID')
+    this.loggedUserID = localStorage.getItem('userID');
+    this.loggedUserName = localStorage.getItem('userName');
+    this.storeID = localStorage.getItem('storeID');
+    this.isAdmin = ( localStorage.getItem('isAdmin') === 'true' ) ? true : false;
+
     if (this.loggedUserID) {
       this.loadProfile(this.loggedUserID);
       this.loadStoreDetails(this.storeID);
     } else {
       this.routes.navigate(['/login']);
     }
+    this.getStores();
+    this.getUsers();
+  }
+
+  getStores() {
+    this.userService.getAllStores().subscribe((stores: StoreDetails[]) => {
+      if (stores) {
+        this.stores = stores;
+      }
+    });
+  }
+
+  getUsers() {
+    this.userService.getAllUsers().subscribe((users: UserDetails[]) => {
+      if (users) {
+        this.userRows = users;
+        data = users;
+        this.temp = [...data];
+        this.table = data;
+      }
+    });
   }
 
   loadProfile(userid) {
     this.userService.getUserDetails(userid).subscribe((userDetails: UserDetails) => {
       if (userDetails) {
         this.user = userDetails;
-        localStorage.setItem('username', this.user.name);
+        localStorage.setItem('user', this.user.name);
       }
     });
 
-   /* this.name = localStorage.getItem('username');
-    this.email = localStorage.getItem('email');
-    this.phoneno = localStorage.getItem('phoneno');
-    this.role = localStorage.getItem('role');*/
   }
 
   loadStoreDetails(storeID) {
@@ -51,45 +87,197 @@ export class ProfileComponent implements OnInit {
     });
   }
 
-  updateUserDetails(newName, newEmail, newPhoneno) {
-    if (this.user.name !== newName || this.user.email !== newEmail || this.user.phoneno !== newPhoneno) {
-      this.userService.updateUserDetails(newName, newEmail, newPhoneno, this.loggedUserID).subscribe((res: string) => {
-        if (res === 'success') {
-          this.successMessage = true;
-          this.message = 'Details updated successfully in database';
-          this.loadProfile(this.loggedUserID);
-        } else {
-          this.failMessage = true;
-          this.message = 'Failed to update details in database';
-        }
-        setTimeout(() => {
-          this.failMessage = false;
-          this.successMessage = false;
-        }, 4000);
-      });
+  updateUserDetails(newName, newEmail, newPhoneno, role?, username?, store?) {
+    role = role ? role : localStorage.getItem('role');
+    username = username ? username : this.loggedUserName;
+    store = store ? store : this.storeID;
+    if (this.user.name !== newName || this.user.email !== newEmail || this.user.phoneno !== newPhoneno ||
+      this.user.role !== role || this.user.username !== username || this.user.store !== store ) {
+      this.userService.updateUserDetails(newName, newEmail, newPhoneno, role, username, store, this.loggedUserID)
+        .subscribe((res: string) => {
+          if (res === 'success') {
+            this.successMessage = true;
+            this.message = 'Details updated successfully in database';
+            this.loadProfile(this.loggedUserID);
+          } else {
+            this.failMessage = true;
+            this.message = 'Failed to update details in database';
+          }
+          setTimeout(() => {
+            this.failMessage = false;
+            this.successMessage = false;
+          }, 4000);
+        });
     }
   }
 
   updateStoreDetails(newName, newPincode, newPhoneno, newAddress, newFB, newTW, newYT) {
     if (this.store.name !== newName || this.store.pincode !== newPincode || this.store.phoneno !== newPhoneno ||
       this.store.address !== newAddress || this.store.facebookURL !== newFB || this.store.twitterURL !== newTW ||
-      this.store.youtubeURL !== newYT ) {
+      this.store.youtubeURL !== newYT) {
       this.userService.updateStoreDetails(newName, newPincode, newPhoneno, newAddress, newFB, newTW, newYT, this.storeID).subscribe(
         (res: string) => {
+          if (res === 'success') {
+            console.log(res);
+            this.successMessage = true;
+            this.message = 'Store Details updated successfully in database';
+            this.loadStoreDetails(this.storeID);
+          } else {
+            this.failMessage = true;
+            this.message = 'Failed to update store details in database';
+          }
+          setTimeout(() => {
+            this.failMessage = false;
+            this.successMessage = false;
+          }, 4000);
+        });
+    }
+  }
+
+  changePassword(oldPassword, newPassword, reNewPassword, form) {
+    let error: string;
+    if (oldPassword === localStorage.getItem('password')) {
+      if (oldPassword !== newPassword) {
+        if (newPassword === reNewPassword) {
+          this.userService.changePassword(newPassword, this.loggedUserID).subscribe((res: string) => {
+            if (res) {
+              if (res === 'success') {
+                console.log(res);
+                this.successMessage = true;
+                this.message = 'Password updated successfully in database';
+                localStorage.setItem('password', newPassword);
+                form.reset();
+              } else {
+                this.failMessage = true;
+                this.message = 'Failed to update password in database';
+              }
+              setTimeout(() => {
+                this.failMessage = false;
+                this.successMessage = false;
+              }, 4000);
+            }
+          });
+        } else {
+          error = 'New Passwords doesnot match';
+        }
+      } else {
+        error = 'Old password and new password cannot be same';
+      }
+    } else {
+      error = 'Current password is wrong. please provide correct password';
+    }
+    if (error) {
+      this.failMessage = true;
+      this.message = error;
+    }
+  }
+
+  changeStoreSelected(selectedStore: any) {
+    this.newUserStoreSelected = selectedStore.value;
+  }
+
+  changeRoleSelected(selectedRole: any) {
+    this.newUserRoleSelected = selectedRole.value;
+  }
+
+
+  addUser(userID, name, email, password, phoneno, form) {
+    this.userService.addUser(userID, name, email, password, phoneno, this.newUserStoreSelected, this.newUserRoleSelected)
+      .subscribe((res) => {
+        if (res) {
+          if (res === 'success') {
+            console.log(res);
+            this.successMessage = true;
+            this.message = 'User added successfully in database';
+            form.reset();
+          } else {
+            this.failMessage = true;
+            this.message = 'Failed to add user in database';
+          }
+          setTimeout(() => {
+            this.failMessage = false;
+            this.successMessage = false;
+          }, 4000);
+        }
+      });
+  }
+
+  addStore(name, phoneno, pincode, FB, Twitter, Youtube, address, form) {
+    this.userService.addStore(name, phoneno, pincode, FB, Twitter, Youtube, address).subscribe((res) => {
+      if (res) {
         if (res === 'success') {
-          console.log(res)
+          console.log(res);
           this.successMessage = true;
-          this.message = 'Store Details updated successfully in database';
-          this.loadStoreDetails(this.storeID);
+          this.message = 'Store added successfully in database';
+          form.reset();
         } else {
           this.failMessage = true;
-          this.message = 'Failed to update store details in database';
+          this.message = 'Failed to add store in database';
         }
         setTimeout(() => {
           this.failMessage = false;
           this.successMessage = false;
         }, 4000);
-      });
+      }
+    });
+  }
+
+  updateFilter(event) {
+    const val = event.target.value.toLowerCase();
+
+    // filter our data
+    const temp = this.temp.filter(function (d) {
+      return d.name.toLowerCase().indexOf(val) !== -1 || !val;
+    });
+
+    // update the rows
+    this.userRows = temp;
+    // Whenever the filter changes, always go back to the first page
+    this.table = data;
+  }
+
+  updateValue(event, cell, rowIndex) {
+    this.editing[rowIndex + '-' + cell] = false;
+    if (!event.target.value) {
+      alert('Cannot save empty fields');
+      return;
+    }
+    if (cell === 'phoneno') {
+      if (!(/^\d+$/.test(event.target.value))) {
+        alert('Please provide only numbers');
+        return;
+      }
+    }
+    if (this.userRows[rowIndex][cell] !== event.target.value) {
+      console.log('inline editing rowIndex', rowIndex);
+      this.editing[rowIndex + '-' + cell] = false;
+      this.userRows[rowIndex][cell] = event.target.value;
+      this.userRows = [...this.userRows];
+      this.updateUserDetails(this.userRows[rowIndex]['name'], this.userRows[rowIndex]['email'], this.userRows[rowIndex]['phoneno'],
+        this.userRows[rowIndex]['role'], this.userRows[rowIndex]['username'], this.userRows[rowIndex]['store']);
+      console.log('UPDATED!', this.userRows[rowIndex][cell]);
     }
   }
+
+  deleteUser(rowIndex) {
+    if (confirm('Are you sure to delete ' + this.userRows[rowIndex].name)) {
+      this.userService.deleteUser(this.userRows[rowIndex]).subscribe((result: string) => {
+        if (result === 'success') {
+          this.getUsers();
+          this.successMessage = true;
+          this.message = 'User deleted successfully in database';
+        } else {
+          this.failMessage = true;
+          this.message = 'Failed to delete user in database';
+        }
+        setTimeout(() => {
+          this.failMessage = false;
+          this.successMessage = false;
+        }, 3000);
+      });
+    }
+
+  }
+
+
 }

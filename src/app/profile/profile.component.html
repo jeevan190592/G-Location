@@ -3,7 +3,7 @@
 
   <!-- Column -->
   <!-- Column -->
-  <div class="col-lg-6 col-xlg-9 col-md-7">
+  <div class="col-lg-8 col-xlg-9 col-md-7">
     <div class="card">
       <ngb-tabset type="pills" class="custom-pills">
 
@@ -66,13 +66,15 @@
                 <div class="form-group">
                   <label class="col-md-12">Full Name</label>
                   <div class="col-md-12">
-                    <input type="text" placeholder="Johnathan Doe" value="{{user.name}}" class="form-control form-control-line" #userName>
+                    <input type="text" placeholder="Johnathan Doe" value="{{user.name}}"
+                           class="form-control form-control-line" #userName>
                   </div>
                 </div>
                 <div class="form-group">
                   <label for="example-email" class="col-md-12">Email</label>
                   <div class="col-md-12">
-                    <input type="email" placeholder="johnathan@admin.com" value="{{user.email}}" class="form-control form-control-line"
+                    <input type="email" placeholder="johnathan@admin.com" value="{{user.email}}"
+                           class="form-control form-control-line"
                            name="example-email" id="exampsle-email" #userEmail>
                   </div>
                 </div>
@@ -80,12 +82,16 @@
                 <div class="form-group">
                   <label class="col-md-12">Phone No</label>
                   <div class="col-md-12">
-                    <input type="text" placeholder="123 456 7890" value="{{user.phoneno}}" class="form-control form-control-line" #userPhoneno>
+                    <input type="text" placeholder="123 456 7890" value="{{user.phoneno}}"
+                           class="form-control form-control-line" #userPhoneno>
                   </div>
                 </div>
+
                 <div class="form-group">
                   <div class="col-sm-12">
-                    <button class="btn btn-success" (click)="updateUserDetails(userName.value, userEmail.value, userPhoneno.value)">Update</button>
+                    <button class="btn btn-success"
+                            (click)="updateUserDetails(userName.value, userEmail.value, userPhoneno.value)">Update
+                    </button>
                   </div>
                 </div>
                 <div *ngIf="successMessage" class="alert alert-success">{{ message }}</div>
@@ -94,58 +100,68 @@
             </div>
           </ng-template>
         </ngb-tab>
-        <ngb-tab title="Store details">
+        <ngb-tab title="Store details" *ngIf="!isAdmin">
           <ng-template ngbTabContent>
             <div class="card-body" *ngIf="store">
               <form class="form-horizontal form-material">
                 <div class="form-group">
                   <label class="col-md-12">Store Name</label>
                   <div class="col-md-12">
-                    <input type="text" placeholder="Johnathan Doe" value="{{store.name}}" class="form-control form-control-line" #storeName>
+                    <input type="text" placeholder="Johnathan Doe" value="{{store.name}}"
+                           class="form-control form-control-line" #storeName>
                   </div>
                 </div>
 
                 <div class="form-group">
                   <label class="col-md-12">Pincode</label>
                   <div class="col-md-12">
-                    <input type="text" placeholder="123 456 7890" value="{{store.pincode}}" class="form-control form-control-line" #storepincode>
+                    <input type="text" placeholder="123 456 7890" value="{{store.pincode}}"
+                           class="form-control form-control-line" #storepincode>
                   </div>
                 </div>
 
                 <div class="form-group">
                   <label class="col-md-12">Pincode</label>
                   <div class="col-md-12">
-                    <input type="text" placeholder="123 456 7890" value="{{store.phoneno}}" class="form-control form-control-line" #storePhoneno>
+                    <input type="text" placeholder="123 456 7890" value="{{store.phoneno}}"
+                           class="form-control form-control-line" #storePhoneno>
                   </div>
                 </div>
 
                 <div class="form-group">
                   <label class="col-md-12">Address</label>
                   <div class="col-md-12">
-                    <textarea rows="5" class="form-control form-control-line" #storeAddress> {{store.address}}</textarea>
+                    <textarea rows="5" class="form-control form-control-line"
+                              #storeAddress> {{store.address}}</textarea>
                   </div>
                 </div>
                 <div class="form-group">
                   <label class="col-md-12">Facebook URL</label>
                   <div class="col-md-12">
-                    <input type="text" placeholder="123 456 7890"  value="{{store.facebookURL}}"class="form-control form-control-line" #storeFB>
+                    <input type="text" placeholder="123 456 7890" value="{{store.facebookURL}}"
+                           class="form-control form-control-line" #storeFB>
                   </div>
                 </div>
                 <div class="form-group">
                   <label class="col-md-12">Twitter URL</label>
                   <div class="col-md-12">
-                    <input type="text" placeholder="123 456 7890"  value="{{store.twitterURL}}"class="form-control form-control-line" #storeTW>
+                    <input type="text" placeholder="123 456 7890" value="{{store.twitterURL}}"
+                           class="form-control form-control-line" #storeTW>
                   </div>
                 </div>
                 <div class="form-group">
                   <label class="col-md-12">Youtube URL</label>
                   <div class="col-md-12">
-                    <input type="text" placeholder="123 456 7890"  value="{{store.youtubeURL}}"class="form-control form-control-line" #storeYT>
+                    <input type="text" placeholder="123 456 7890" value="{{store.youtubeURL}}"
+                           class="form-control form-control-line" #storeYT>
                   </div>
                 </div>
                 <div class="form-group">
                   <div class="col-sm-12">
-                    <button class="btn btn-success" (click)="updateStoreDetails(storeName.value, storepincode.value, storePhoneno.value, storeAddress.value, storeFB.value, storeTW.value, storeYT.value)">Update</button>
+                    <button class="btn btn-success"
+                            (click)="updateStoreDetails(storeName.value, storepincode.value, storePhoneno.value, storeAddress.value, storeFB.value, storeTW.value, storeYT.value)">
+                      Update
+                    </button>
                   </div>
                 </div>
                 <div *ngIf="successMessage" class="alert alert-success">{{ message }}</div>
@@ -157,181 +173,254 @@
         <ngb-tab title="Change Password">
           <ng-template ngbTabContent>
             <div class="card-body">
-              <form class="form-horizontal form-material">
+              <form class="form-horizontal form-material" #changePasswordForm>
                 <div class="form-group">
                   <label class="col-md-12">Current Password</label>
                   <div class="col-md-12">
-                    <input type="password" class="form-control form-control-line">
+                    <input type="password" class="form-control form-control-line" #password>
                   </div>
                 </div>
                 <div class="form-group">
                   <label for="example-email" class="col-md-12">New password</label>
                   <div class="col-md-12">
                     <input type="password" class="form-control form-control-line"
-                           name="example-email" id="example-email">
+                           name="example-email" id="example-email" #newPassword>
                   </div>
                 </div>
                 <div class="form-group">
                   <label class="col-md-12">Re-enter new Password</label>
                   <div class="col-md-12">
-                    <input type="password" class="form-control form-control-line">
+                    <input type="password" class="form-control form-control-line" #reNewPassword>
                   </div>
                 </div>
                 <div class="form-group">
                   <div class="col-sm-12">
-                    <button class="btn btn-success">Change Password</button>
+                    <button class="btn btn-success"
+                            (click)="changePassword(password.value, newPassword.value, reNewPassword.value, changePasswordForm)">Change
+                      Password
+                    </button>
                   </div>
                 </div>
+                <div *ngIf="successMessage" class="alert alert-success">{{ message }}</div>
+                <div *ngIf="failMessage" class="alert alert-danger">{{ message }}</div>
               </form>
             </div>
           </ng-template>
         </ngb-tab>
-        <ngb-tab title="Add User">
-        <ng-template ngbTabContent>
-          <div class="card-body">
-            <form class="form-horizontal form-material">
-              <div class="form-group">
-                <label class="col-md-12">Full Name</label>
-                <div class="col-md-12">
-                  <input type="text" placeholder="Johnathan Doe" class="form-control form-control-line">
-                </div>
-              </div>
-              <div class="form-group">
-                <label for="example-email" class="col-md-12">Email</label>
-                <div class="col-md-12">
-                  <input type="email" placeholder="johnathan@admin.com" class="form-control form-control-line"
-                         name="example-email">
-                </div>
-              </div>
-              <div class="form-group">
-                <label class="col-md-12">Current Password</label>
-                <div class="col-md-12">
-                  <input type="password" class="form-control form-control-line">
-                </div>
-              </div>
-              <div class="form-group">
-                <label class="col-md-12">Phone No</label>
-                <div class="col-md-12">
-                  <input type="text" placeholder="123 456 7890" class="form-control form-control-line">
-                </div>
-              </div>
-              <div class="form-group">
-                <label class="col-md-12">Facebook URL</label>
-                <div class="col-md-12">
-                  <input type="text" placeholder="123 456 7890" class="form-control form-control-line">
-                </div>
-              </div>
-              <div class="form-group">
-                <label class="col-md-12">Twitter URL</label>
-                <div class="col-md-12">
-                  <input type="text" placeholder="123 456 7890" class="form-control form-control-line">
-                </div>
-              </div>
-              <div class="form-group">
-                <label class="col-md-12">Youtube URL</label>
-                <div class="col-md-12">
-                  <input type="text" placeholder="123 456 7890" class="form-control form-control-line">
-                </div>
-              </div>
-              <div class="form-group">
-                <label class="col-md-12">Address</label>
-                <div class="col-md-12">
-                  <textarea rows="5" class="form-control form-control-line"></textarea>
-                </div>
-              </div>
-              <div class="form-group">
-                <label class="col-sm-12">Select Country</label>
-                <div class="col-sm-12">
-                  <select class="form-control form-control-line">
-                    <option>London</option>
-                    <option>India</option>
-                    <option>Usa</option>
-                    <option>Canada</option>
-                    <option>Thailand</option>
-                  </select>
-                </div>
-              </div>
-              <div class="form-group">
-                <div class="col-sm-12">
-                  <button class="btn btn-success">Update Profile</button>
-                </div>
-              </div>
-            </form>
-          </div>
-        </ng-template>
-      </ngb-tab>
-        <ngb-tab title="Edit User">
+        <ngb-tab title="Add Store" *ngIf="isAdmin">
           <ng-template ngbTabContent>
             <div class="card-body">
-              <form class="form-horizontal form-material">
+              <form class="form-horizontal form-material" #addStoreForm>
                 <div class="form-group">
-                  <label class="col-md-12">Full Name</label>
+                  <label class="col-md-12">Store Name</label>
                   <div class="col-md-12">
-                    <input type="text" placeholder="Johnathan Doe" class="form-control form-control-line">
-                  </div>
-                </div>
-                <div class="form-group">
-                  <label for="example-email" class="col-md-12">Email</label>
-                  <div class="col-md-12">
-                    <input type="email" placeholder="johnathan@admin.com" class="form-control form-control-line"
-                           name="example-email">
-                  </div>
-                </div>
-                <div class="form-group">
-                  <label class="col-md-12">Current Password</label>
-                  <div class="col-md-12">
-                    <input type="password" class="form-control form-control-line">
-                  </div>
-                </div>
-                <div class="form-group">
-                  <label class="col-md-12">Phone No</label>
-                  <div class="col-md-12">
-                    <input type="text" placeholder="123 456 7890" class="form-control form-control-line">
-                  </div>
-                </div>
-                <div class="form-group">
-                  <label class="col-md-12">Facebook URL</label>
-                  <div class="col-md-12">
-                    <input type="text" placeholder="123 456 7890" class="form-control form-control-line">
-                  </div>
-                </div>
-                <div class="form-group">
-                  <label class="col-md-12">Twitter URL</label>
-                  <div class="col-md-12">
-                    <input type="text" placeholder="123 456 7890" class="form-control form-control-line">
-                  </div>
-                </div>
-                <div class="form-group">
-                  <label class="col-md-12">Youtube URL</label>
-                  <div class="col-md-12">
-                    <input type="text" placeholder="123 456 7890" class="form-control form-control-line">
+                    <input type="text" placeholder="Store" class="form-control form-control-line" #storeName>
                   </div>
                 </div>
                 <div class="form-group">
                   <label class="col-md-12">Address</label>
                   <div class="col-md-12">
-                    <textarea rows="5" class="form-control form-control-line"></textarea>
+                    <textarea rows="5" class="form-control form-control-line" #storeAddress></textarea>
                   </div>
                 </div>
                 <div class="form-group">
-                  <label class="col-sm-12">Select Country</label>
+                  <label for="example-email" class="col-md-12">Pincode</label>
+                  <div class="col-md-12">
+                    <input type="number" placeholder="user@email.com" class="form-control form-control-line"
+                           name="example-email" #storePincode>
+                  </div>
+                </div>
+                <div class="form-group">
+                  <label class="col-md-12">Phone No</label>
+                  <div class="col-md-12">
+                    <input type="number" placeholder="123 456 7890" class="form-control form-control-line" #storePhoneno>
+                  </div>
+                </div>
+                <div class="form-group">
+                  <label class="col-md-12">Facebook URL</label>
+                  <div class="col-md-12">
+                    <input type="text" placeholder="facebook.com/user" class="form-control form-control-line" #storeFBURL>
+                  </div>
+                </div>
+                <div class="form-group">
+                  <label class="col-md-12">Twitter URL</label>
+                  <div class="col-md-12">
+                    <input type="text" placeholder="twitter.com/user" class="form-control form-control-line" #storeTwitterURL>
+                  </div>
+                </div>
+                <div class="form-group">
+                  <label class="col-md-12">Youtube URL</label>
+                  <div class="col-md-12">
+                    <input type="text" placeholder="youtube.com/user" class="form-control form-control-line" #storeYoutubeURL>
+                  </div>
+                </div>
+
+                <div class="form-group">
                   <div class="col-sm-12">
-                    <select class="form-control form-control-line">
-                      <option>London</option>
-                      <option>India</option>
-                      <option>Usa</option>
-                      <option>Canada</option>
-                      <option>Thailand</option>
+                    <button class="btn btn-success"
+                            (click)="addStore(storeName.value, storePhoneno.value, storePincode.value, storeFBURL.value, storeTwitterURL.value, storeYoutubeURL.value, storeAddress.value, addStoreForm)">Add Store</button>
+                  </div>
+                </div>
+                <div *ngIf="successMessage" class="alert alert-success">{{ message }}</div>
+                <div *ngIf="failMessage" class="alert alert-danger">{{ message }}</div>
+              </form>
+            </div>
+          </ng-template>
+        </ngb-tab>
+        <ngb-tab title="Add User" *ngIf="isAdmin">
+          <ng-template ngbTabContent>
+            <div class="card-body">
+              <form class="form-horizontal form-material" #newUserForm>
+                <div class="form-group">
+                  <label class="col-md-12">Full Name</label>
+                  <div class="col-md-12">
+                    <input type="text" placeholder="Name" class="form-control form-control-line" #newUserName>
+                  </div>
+                </div>
+                <div class="form-group">
+                  <label class="col-md-12">UserID</label>
+                  <div class="col-md-12">
+                    <input type="text" placeholder="UserID" class="form-control form-control-line" #newUserID>
+                  </div>
+                </div>
+                <div class="form-group">
+                  <label for="example-email" class="col-md-12">Email</label>
+                  <div class="col-md-12">
+                    <input type="email" placeholder="user@email.com" class="form-control form-control-line"
+                           name="example-email" #newUserEmail>
+                  </div>
+                </div>
+                <div class="form-group">
+                  <label class="col-md-12">Current Password</label>
+                  <div class="col-md-12">
+                    <input type="password" class="form-control form-control-line" #newUserPassword>
+                  </div>
+                </div>
+                <div class="form-group">
+                  <label class="col-md-12">Phone No</label>
+                  <div class="col-md-12">
+                    <input type="number" placeholder="123 456 7890" class="form-control form-control-line" #newUserPhoneNo>
+                  </div>
+                </div>
+                <div class="form-group" *ngIf="stores">
+                  <label class="col-sm-12">Select Store</label>
+                  <div class="col-sm-12">
+                    <select class="form-control form-control-line" (change)="changeStoreSelected($event.target)" >
+                      <option *ngFor="let storeItem of stores" [value]="storeItem.id" >{{storeItem.name}}</option>
+                    </select>
+                  </div>
+                </div>
+                <div class="form-group">
+                  <label class="col-sm-12">Role</label>
+                  <div class="col-sm-12">
+                    <select class="form-control form-control-line" (change)="changeRoleSelected($event.target)" >
+                      <option value="Admin" >Admin</option>
+                      <option value="Store Manager" >Store Manager</option>
                     </select>
                   </div>
                 </div>
                 <div class="form-group">
                   <div class="col-sm-12">
-                    <button class="btn btn-success">Update Profile</button>
+                    <button class="btn btn-success" (click)="addUser(newUserID.value, newUserName.value, newUserEmail.value, newUserPassword.value, newUserPhoneNo.value, newUserForm)">Update Profile</button>
                   </div>
                 </div>
+                <div *ngIf="successMessage" class="alert alert-success">{{ message }}</div>
+                <div *ngIf="failMessage" class="alert alert-danger">{{ message }}</div>
               </form>
             </div>
+          </ng-template>
+        </ngb-tab>
+        <ngb-tab title="Edit Users" (change)="getUsers()" *ngIf="isAdmin">
+          <ng-template ngbTabContent> &nbsp;
+            <form class="w-50 m-b-30">
+              <input type='text' class="form-control" placeholder='Search the Users by name'
+                     (keyup)='updateFilter($event)'/>
+            </form>
+            <ngx-datatable #mydatatable class="material" [headerHeight]="50" [limit]="5" [columnMode]="'force'"
+                           [footerHeight]="50" [rowHeight]="'auto'"
+                           [rows]="userRows">
+              <ngx-datatable-column name="Name">
+                <ng-template ngx-datatable-cell-template let-rowIndex="rowIndex" let-value="value" let-row="row">
+              <span title="Double click to edit" (dblclick)="editing[rowIndex + '-name'] = true"
+                    *ngIf="!editing[rowIndex + '-name']">
+                {{value}}
+              </span>
+                  <input autofocus (blur)="updateValue($event, 'name', rowIndex)" *ngIf="editing[rowIndex+ '-name']"
+                         type="text" [value]="value"
+                  />
+                </ng-template>
+              </ngx-datatable-column>
+              <ngx-datatable-column name="Email">
+                <ng-template ngx-datatable-cell-template let-rowIndex="rowIndex" let-row="row" let-value="value">
+              <span title="Double click to edit" (dblclick)="editing[rowIndex + '-email'] = true"
+                    *ngIf="!editing[rowIndex + '-email']">
+                {{value}}
+              </span>
+                  <input autofocus (blur)="updateValue($event, 'email', rowIndex)"
+                         *ngIf="editing[rowIndex+ '-email']"
+                         type="text" [value]="value"
+                  />
+                </ng-template>
+              </ngx-datatable-column>
+              <ngx-datatable-column name="Role">
+                <ng-template ngx-datatable-cell-template let-rowIndex="rowIndex" let-row="row" let-value="value">
+              <span title="Double click to edit" (dblclick)="editing[rowIndex + '-role'] = true"
+                    *ngIf="!editing[rowIndex + '-role']">
+                {{value}}
+              </span>
+                  <input autofocus (blur)="updateValue($event, 'role', rowIndex)"
+                         *ngIf="editing[rowIndex+ '-role']"
+                         type="text" [value]="value"
+                  />
+                </ng-template>
+              </ngx-datatable-column>
+              <ngx-datatable-column name="Phoneno">
+                <ng-template ngx-datatable-cell-template let-rowIndex="rowIndex" let-row="row" let-value="value">
+              <span title="Double click to edit" (dblclick)="editing[rowIndex + '-phoneno'] = true"
+                    *ngIf="!editing[rowIndex + '-phoneno']">
+                {{value}}
+              </span>
+                  <input autofocus (blur)="updateValue($event, 'phoneno', rowIndex)"
+                         *ngIf="editing[rowIndex+ '-phoneno']"
+                         type="text" [value]="value"
+                  />
+                </ng-template>
+              </ngx-datatable-column>
+              <ngx-datatable-column name="Username">
+                <ng-template ngx-datatable-cell-template let-rowIndex="rowIndex" let-row="row" let-value="value">
+              <span title="Double click to edit" (dblclick)="editing[rowIndex + '-username'] = true"
+                    *ngIf="!editing[rowIndex + '-username']">
+                {{value}}
+              </span>
+                  <input autofocus (blur)="updateValue($event, 'username', rowIndex)" *ngIf="editing[rowIndex+ '-username']"
+                         type="text" [value]="value"
+                  />
+                </ng-template>
+              </ngx-datatable-column>
+              <ngx-datatable-column name="Store">
+                <ng-template ngx-datatable-cell-template let-rowIndex="rowIndex" let-row="row" let-value="value">
+              <span title="Double click to edit" (dblclick)="editing[rowIndex + '-store'] = true"
+                    *ngIf="!editing[rowIndex + '-store']">
+                {{value}}
+              </span>
+                  <select *ngIf="editing[rowIndex + '-store']" (change)="updateValue($event, 'store', rowIndex)" [value]="value">
+                    <option value="" >Select Store</option>
+                    <option *ngFor="let storeItem of stores" [value]="storeItem.id" >{{storeItem.name}}</option>
+                  </select>
+                </ng-template>
+              </ngx-datatable-column>
+              <ngx-datatable-column>
+                <ng-template ngx-datatable-cell-template let-rowIndex="rowIndex" let-row="row" let-value="value">
+
+                  <a style="cursor: pointer" tooltip="Click to delete" (click)="deleteUser(rowIndex)"><i class="fas fa-trash-alt"></i></a>
+
+                </ng-template>
+              </ngx-datatable-column>
+
+            </ngx-datatable>
+
+            <div *ngIf="successMessage" class="alert alert-success">{{ message }}</div>
+            <div *ngIf="failMessage" class="alert alert-danger">{{ message }}</div>
           </ng-template>
         </ngb-tab>
       </ngb-tabset>

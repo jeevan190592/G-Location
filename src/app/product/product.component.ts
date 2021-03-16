@@ -20,13 +20,7 @@ export class ProductComponent implements OnInit {
   successMessage = false;
   private readonly notifier: NotifierService;
 
-  constructor(private productService: ProductService) {
-    /*this.rows = data;
-    this.temp = [...data];
-    setTimeout(() => {
-      this.loadingIndicator = false;
-    }, 1500); */
-  }
+  constructor(private productService: ProductService) {}
 
   editing = {};
   rows = [];
@@ -34,8 +28,6 @@ export class ProductComponent implements OnInit {
 
   loadingIndicator = true;
   reorderable = true;
-
-  // columns = [{ prop: 'name' }, { name: 'Gender' }, { name: 'Company' }];
 
   @ViewChild(DatatableComponent, {static: false}) table: DatatableComponent;
 

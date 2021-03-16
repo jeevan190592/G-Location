@@ -62,9 +62,22 @@ Router.delete("/deleteImage/:id/:storeid/:name", (req, res) => {
   })
 })
 
+
+// users
+
+Router.get("/getAllusers", (req, res) => {
+  mySqlConnection.query("SELECT * from users", (err, rows, fields) => {
+    if (!err) {
+      res.send(rows);
+    } else {
+      console.log(err);
+    }
+  })
+})
+
 Router.post("/login", cors(), (req, res) => {
   var body = req.body;
-  mySqlConnection.query('SELECT * from users where userID = ? and binary password like ?', [body.username, body.password], (err, rows, fields) => {
+  mySqlConnection.query('SELECT * from users where username = ? and binary password like ?', [body.userName, body.password], (err, rows, fields) => {
     if (!err) {
       res.send(rows);
     } else {
@@ -90,22 +103,68 @@ Router.post("/register", (req, res) => {
   })
 })
 
-Router.put("/register", (req, res) => {
+Router.post("/addUser", (req, res) => {
   var body = req.body;
-  var sql = "SET @user = ?;SET @email = ?;SET @id = ?;" +
-    "CALL InsertAndUpdateUsers(@user,@email,@id);";
-  mySqlConnection.query(sql, [body.user, body.email, body.id], (err, rows, fields) => {
+  mySqlConnection.query("INSERT into users(username,name,email,password,store,role,phoneno) values(?, ?, ?, ?, ?, ?, ?)",
+    [body.userID, body.name, body.email, body.password, body.store, body.role, body.phoneno], (err, rows, fields) => {
+      if (!err) {
+        res.send('success');
+      } else {
+        res.send('error');
+        console.log(err);
+      }
+    })
+})
+
+
+Router.get("/getUserDetails/:id", (req, res) => {
+  mySqlConnection.query("SELECT * from users where id = ?", [req.params.id], (err, rows, fields) => {
     if (!err) {
-      rows.forEach(element => {
-        if (element.constructor == Array)
-          res.send('Updated User ID :' + element[0].ID)
-      })
+      res.send(rows[0]);
     } else {
       console.log(err);
     }
   })
 })
 
+Router.put("/updateUserDetails", (req, res) => {
+  var body = req.body;
+  mySqlConnection.query("Update users set name = ?, email = ?, phoneno = ?, role = ?, username = ?, store = ?  where id = ?",
+    [body.name, body.email, body.phoneno, body.role, body.username, body.store, body.id], (err, rows, fields) => {
+      if (!err) {
+        res.send('success');
+      } else {
+        res.send('error');
+        console.log(err);
+      }
+    })
+})
+
+Router.put("/changePassword", (req, res) => {
+  var body = req.body;
+  mySqlConnection.query("Update users set password = ? where username = ?",
+    [body.password, body.id], (err, rows, fields) => {
+      if (!err) {
+        res.send('success');
+      } else {
+        res.send('error');
+        console.log(err);
+      }
+    })
+})
+
+Router.delete("/deleteUser/:id", (req, res) => {
+  mySqlConnection.query('DELETE from users where id =?', [req.params.id], (err, rows, fields) => {
+    if (!err) {
+      res.send('success');
+    } else {
+      res.send('error');
+      console.log(err);
+    }
+  })
+})
+
+// products
 Router.get("/products", (req, res) => {
   mySqlConnection.query("SELECT * from products", (err, rows, fields) => {
     if (!err) {
@@ -115,29 +174,6 @@ Router.get("/products", (req, res) => {
     }
   })
 })
-
-Router.get("/getUserDetails/:id", (req, res) => {
-  mySqlConnection.query("SELECT * from users where userID = ?", [req.params.id], (err, rows, fields) => {
-    if (!err) {
-      console.log(rows)
-      res.send(rows[0]);
-    } else {
-      console.log(err);
-    }
-  })
-})
-
-Router.get("/getStoreDetails/:id", (req, res) => {
-  mySqlConnection.query("SELECT * from stores where id = ?", [req.params.id], (err, rows, fields) => {
-    if (!err) {
-      console.log(rows)
-      res.send(rows[0]);
-    } else {
-      console.log(err);
-    }
-  })
-})
-
 
 Router.put("/updateProduct", (req, res) => {
   var body = req.body.product;
@@ -176,23 +212,31 @@ Router.delete("/deleteProduct/:id/:storeid", (req, res) => {
   })
 })
 
+// store
 
-
-Router.put("/updateUserDetails", (req, res) => {
-  var body = req.body;
-  mySqlConnection.query("Update users set name = ?, email = ?, phoneno = ? where userID = ?",
-    [body.name, body.email, body.phoneno, body.id], (err, rows, fields) => {
-      if (!err) {
-        res.send('success');
-      } else {
-        res.send('error');
-        console.log(err);
-      }
-    })
+Router.get("/getStoreDetails/:id", (req, res) => {
+  mySqlConnection.query("SELECT * from stores where id = ?", [req.params.id], (err, rows, fields) => {
+    if (!err) {
+      res.send(rows[0]);
+    } else {
+      console.log(err);
+    }
+  })
 })
 
+Router.get("/getAllStoreDetails/", (req, res) => {
+  mySqlConnection.query("SELECT * from stores", (err, rows, fields) => {
+    if (!err) {
+      res.send(rows);
+    } else {
+      console.log(err);
+    }
+  })
+})
+
+
+
 Router.put("/updateStoreDetails", (req, res) => {
-  console.log('Triggered')
   var body = req.body;
   mySqlConnection.query("Update stores set name = ?, pincode = ?, phoneno = ?, address = ?, facebookURL = ?, twitterURL = ?, youtubeURL = ? where id = ?",
     [body.name, body.pincode, body.phoneno, body.address, body.fb, body.tw, body.yt, body.id], (err, rows, fields) => {
@@ -205,7 +249,28 @@ Router.put("/updateStoreDetails", (req, res) => {
     })
 })
 
+Router.post("/addStore", (req, res) => {
+  var body = req.body;
+  mySqlConnection.query("INSERT into stores(name,pincode,address,phoneno,facebookURL,twitterURL,youtubeURL) values(?, ?, ?, ?, ?, ?, ?)",
+    [body.name, body.pincode, body.address, body.phoneno, body.FB, body.twitter, body.youtube], (err, rows, fields) => {
+      if (!err) {
+        res.send('success');
+      } else {
+        res.send('error');
+        console.log(err);
+      }
+    })
+})
 
-
+Router.delete("/deleteStore/:id", (req, res) => {
+  mySqlConnection.query('DELETE from stores where id =?', [req.params.id], (err, rows, fields) => {
+    if (!err) {
+      res.send('success');
+    } else {
+      res.send('error');
+      console.log(err);
+    }
+  })
+})
 
 module.exports = Router;

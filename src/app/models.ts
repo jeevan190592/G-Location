@@ -1,12 +1,12 @@
 export class UserDetails {
   id: string
-  userID: string
+  username: string
   created: string
   updated: string
   name: string
   email: string
   password: string;
-  storeID: string;
+  store: string;
   phoneno: string;
   role: string;
 }

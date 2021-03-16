@@ -32,5 +32,13 @@ export const ROUTES: RouteInfo[] = [
     class: '',
     extralink: false,
     submenu: []
+  },
+  {
+    path: '/login',
+    title: 'Login',
+    icon: '',
+    class: '',
+    extralink: false,
+    submenu: []
   }
 ];

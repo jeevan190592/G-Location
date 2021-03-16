@@ -14,10 +14,6 @@ export const Approutes: Routes = [
     children: [
       { path: '', redirectTo: '/search', pathMatch: 'full' },
       {
-        path: 'starter',
-        loadChildren: () => import('./starter/starter.module').then(m => m.StarterModule)
-      },
-      {
         path: 'product',
         loadChildren: () => import('./product/product.module').then(m => m.ProductModule)
       },

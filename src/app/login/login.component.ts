@@ -11,6 +11,7 @@ import {UserDetails} from '../models';
 })
 export class LoginComponent implements OnInit {
   msg = '';
+  isAdmin
   constructor(private loginService: LoginService, private routes: Router) { }
 
   ngOnInit() {
@@ -18,15 +19,24 @@ export class LoginComponent implements OnInit {
   check(uname: string, password: string) {
     this.loginService.login(uname, password).subscribe((user: UserDetails) => {
       if (user) {
-        localStorage.setItem('userID', user.userID);
-        localStorage.setItem('username', user.name);
+        localStorage.setItem('userName', user.username);
+        localStorage.setItem('user', user.name);
+        localStorage.setItem('userID', user.id);
         localStorage.setItem('email', user.email);
         localStorage.setItem('phoneno', user.phoneno);
-        localStorage.setItem('storeID', user.storeID);
+        localStorage.setItem('storeID', user.store);
         localStorage.setItem('role', user.role);
-        console.log('Local storage - ' + localStorage.getItem('username'));
+        localStorage.setItem('password', user.password);
+        this.isAdmin = (user.role = 'Admin') ? true : false
+        localStorage.setItem('isAdmin', this.isAdmin, );
+        console.log('Local storage - ' + localStorage.getItem('user'));
         console.log('Local storage - ' + localStorage.getItem('storeID'));
-        this.routes.navigate(['/product']);
+        if (this.isAdmin) {
+          this.routes.navigate(['/profile']);
+        } else {
+          this.routes.navigate(['/product']);
+
+        }
       } else {
         this.msg = 'Invalid Username or Password';
       }}
