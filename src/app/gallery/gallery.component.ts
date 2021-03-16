@@ -2,6 +2,7 @@ import {Component, OnInit} from '@angular/core';
 import {GalleryService} from '../services/gallery.service';
 import {FormBuilder, FormGroup} from '@angular/forms';
 import {Gallery} from '../models';
+import {Router} from '@angular/router';
 
 @Component({
   templateUrl: 'gallery.component.html'
@@ -14,20 +15,29 @@ export class GalleryComponent implements OnInit {
   message = '';
   failMessage = false;
   successMessage = false;
+  showMessage = false
+  showAddElements = true
 
-  constructor(private formBuilder: FormBuilder, private galleryService: GalleryService) {
+  constructor(private formBuilder: FormBuilder, private galleryService: GalleryService, private routes: Router) {
   }
 
   ngOnInit() {
-    this.storeID = localStorage.getItem('storeID');
-    this.loadGallery(this.storeID);
-    this.form = this.formBuilder.group({
-      profile: ['']
-    });
+    if (!localStorage.getItem('userID')) {
+      this.showAddElements = false;
+    }
+    if (localStorage.getItem('storeID')) {
+      this.storeID = localStorage.getItem('storeID');
+      this.loadGallery(this.storeID);
+      this.form = this.formBuilder.group({
+        profile: ['']
+      });
+    } else {
+      this.routes.navigate(['/search']);
+    }
+
   }
 
   onChange(event) {
-
     if (event.target.files.length > 0) {
       const file = event.target.files[0];
       this.form.get('profile').setValue(file);
@@ -61,9 +71,11 @@ export class GalleryComponent implements OnInit {
 
   loadGallery(storeID) {
     this.galleryService.loadGallery(storeID).subscribe((images: Gallery[]) => {
-      if (images) {
+      if (images.length !== 0) {
         this.items = images;
         console.log(images);
+      } else {
+        this.showMessage = true;
       }
     });
   }

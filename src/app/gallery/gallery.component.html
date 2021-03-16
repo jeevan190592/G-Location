@@ -1,11 +1,12 @@
 <div class="row">
   <div class="col-12">
     <!-- Row -->
-    <div class="row">
+    <div class="row" *ngIf="showAddElements">
       <div class="form-group">
         <div class="col-md-12">
-          <form #addImageForm [formGroup]="form" enctype="multipart/form-data" (ngSubmit)="onSubmit(title.value, descr.value, addImageForm)">
-            <input type="file" name="profile" (change)="onChange($event)" />
+          <form #addImageForm [formGroup]="form" enctype="multipart/form-data"
+                (ngSubmit)="onSubmit(title.value, descr.value, addImageForm)">
+            <input type="file" name="profile" (change)="onChange($event)"/>
             <input type="text" class="form" placeholder="Title" name="titl" #title> &nbsp;
             <input type="text" class="form" placeholder="Description" name="desc" #descr> &nbsp;
             <button class="btn btn-success" type="submit">Upload image</button>
@@ -18,7 +19,7 @@
     <br>
     <div class="row">
       <!-- column -->
-      <div class="col-lg-3 col-md-6" *ngFor="let item of items">
+      <div class="col-lg-3 col-md-6 img-responsive" *ngFor="let item of items">
         <!-- Card -->
         <div class="card">
           <img class="card-img-top img-responsive" src="http://localhost:3000/{{item.filename}}" alt="Card image cap">
@@ -30,67 +31,10 @@
         </div>
         <!-- Card -->
       </div>
-      <div class="col-lg-3 col-md-6">
-        <!-- Card -->
+      <div *ngIf="showMessage">
         <div class="card">
-          <img class="card-img-top img-responsive" src="assets/images/big/img1.jpg" alt="Card image cap">
-          <div class="card-body">
-            <h4 class="card-title">title</h4>
-            <p class="card-text">Description</p>
-
-          </div>
+          <h3>No images available for this store</h3>
         </div>
-        <!-- Card -->
-      </div>
-      <div class="col-lg-3 col-md-6">
-        <!-- Card -->
-        <div class="card">
-          <img class="card-img-top img-responsive" src="assets/images/big/img1.jpg" alt="Card image cap">
-          <div class="card-body">
-            <h4 class="card-title">title</h4>
-            <p class="card-text">Description</p>
-          </div>
-        </div>
-        <!-- Card -->
-      </div>
-      <!-- column -->
-      <!-- column -->
-      <div class="col-lg-3 col-md-6">
-        <!-- Card -->
-        <div class="card">
-          <img class="card-img-top img-responsive" src="assets/images/big/img2.jpg" alt="Card image cap">
-          <div class="card-body">
-            <h4 class="card-title">title</h4>
-            <p class="card-text">Description</p>
-          </div>
-        </div>
-        <!-- Card -->
-      </div>
-      <!-- column -->
-      <!-- column -->
-      <div class="col-lg-3 col-md-6">
-        <!-- Card -->
-        <div class="card">
-          <img class="card-img-top img-responsive" src="assets/images/big/img3.jpg" alt="Card image cap">
-          <div class="card-body">
-            <h4 class="card-title">title</h4>
-            <p class="card-text">Description</p>
-          </div>
-        </div>
-        <!-- Card -->
-      </div>
-      <!-- column -->
-      <!-- column -->
-      <div class="col-lg-3 col-md-6 img-responsive">
-        <!-- Card -->
-        <div class="card">
-          <img class="card-img-top img-responsive" src="assets/images/big/img4.jpg" alt="Card image cap">
-          <div class="card-body">
-            <h4 class="card-title">title</h4>
-            <p class="card-text">Description</p>
-          </div>
-        </div>
-        <!-- Card -->
       </div>
       <!-- column -->
     </div>

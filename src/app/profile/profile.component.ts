@@ -5,6 +5,7 @@ import {UserService} from '../services/user.service';
 import {LoginService} from '../services/login.service';
 import {Router} from '@angular/router';
 import {DatatableComponent} from '@swimlane/ngx-datatable';
+import {FormBuilder, FormGroup} from '@angular/forms';
 
 let data: any;
 
@@ -23,9 +24,9 @@ export class ProfileComponent implements OnInit {
   storeID: string;
   newUserStoreSelected: string;
   newUserRoleSelected: string;
-  isAdmin: boolean
-
-  constructor(private userService: UserService, private routes: Router) {
+  isAdmin: boolean;
+  form: FormGroup;
+  constructor(private formBuilder: FormBuilder, private userService: UserService, private routes: Router) {
   }
 
   editing = {};
@@ -38,7 +39,7 @@ export class ProfileComponent implements OnInit {
     this.loggedUserID = localStorage.getItem('userID');
     this.loggedUserName = localStorage.getItem('userName');
     this.storeID = localStorage.getItem('storeID');
-    this.isAdmin = ( localStorage.getItem('isAdmin') === 'true' ) ? true : false;
+    this.isAdmin = ( localStorage.getItem('role') === 'Admin' ) ? true : false;
 
     if (this.loggedUserID) {
       this.loadProfile(this.loggedUserID);
@@ -48,6 +49,9 @@ export class ProfileComponent implements OnInit {
     }
     this.getStores();
     this.getUsers();
+    this.form = this.formBuilder.group({
+      profile: ['']
+    });
   }
 
   getStores() {
@@ -87,13 +91,14 @@ export class ProfileComponent implements OnInit {
     });
   }
 
-  updateUserDetails(newName, newEmail, newPhoneno, role?, username?, store?) {
+  updateUserDetails(newName, newEmail, newPhoneno, password?, role?, username?, store?) {
     role = role ? role : localStorage.getItem('role');
     username = username ? username : this.loggedUserName;
     store = store ? store : this.storeID;
+    password = password ? password : localStorage.getItem('password');
     if (this.user.name !== newName || this.user.email !== newEmail || this.user.phoneno !== newPhoneno ||
-      this.user.role !== role || this.user.username !== username || this.user.store !== store ) {
-      this.userService.updateUserDetails(newName, newEmail, newPhoneno, role, username, store, this.loggedUserID)
+      this.user.password !== password  || this.user.role !== role || this.user.username !== username || this.user.store !== store ) {
+      this.userService.updateUserDetails(newName, newEmail, newPhoneno, password, role, username, store, this.loggedUserID)
         .subscribe((res: string) => {
           if (res === 'success') {
             this.successMessage = true;
@@ -254,7 +259,7 @@ export class ProfileComponent implements OnInit {
       this.userRows[rowIndex][cell] = event.target.value;
       this.userRows = [...this.userRows];
       this.updateUserDetails(this.userRows[rowIndex]['name'], this.userRows[rowIndex]['email'], this.userRows[rowIndex]['phoneno'],
-        this.userRows[rowIndex]['role'], this.userRows[rowIndex]['username'], this.userRows[rowIndex]['store']);
+        this.userRows[rowIndex]['password'], this.userRows[rowIndex]['role'], this.userRows[rowIndex]['username'], this.userRows[rowIndex]['store']);
       console.log('UPDATED!', this.userRows[rowIndex][cell]);
     }
   }
@@ -276,8 +281,35 @@ export class ProfileComponent implements OnInit {
         }, 3000);
       });
     }
-
   }
 
+  onChange(event) {
+    if (event.target.files.length > 0) {
+      const file = event.target.files[0];
+      this.form.get('profile').setValue(file);
+    }
+    console.log(this.form.get('profile').value);
+  }
+  profileImageupload(form) {
+    const formData = new FormData();
+    formData.append('file', this.form.get('profile').value);
+    formData.append('id', localStorage.getItem('userID'));
+    this.userService.profileImageUpload(formData).subscribe(
+      (res) => {
+        if (res === 'success') {
+          this.loadProfile(this.loggedUserID);
+          form.reset();
+          this.successMessage = true;
+          this.message = 'Image uploaded successfully in database';
+        } else {
+          this.failMessage = true;
+          this.message = 'Failed to upload image in database';
+        }
+        setTimeout(() => {
+          this.failMessage = false;
+          this.successMessage = false;
+        }, 3000);
+      });
+  }
 
 }

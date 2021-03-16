@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import {Injectable} from '@angular/core';
 import {map} from 'rxjs/operators';
 import {HttpClient} from '@angular/common/http';
 import {Observable} from 'rxjs';
@@ -15,7 +15,7 @@ import {
   GetStoreDetailsEndpoint,
   GetUserDetailsEndpoint,
   UpdateStoreDetailsEndpoint,
-  UpdateUserDetailsEndpoint
+  UpdateUserDetailsEndpoint, uploadImageEndpoint, uploadProfileImageEndpoint
 } from '../constants';
 
 @Injectable({
@@ -49,6 +49,13 @@ export class UserService {
       }));
   }
 
+  getAllStoresWithName(): Observable<StoreDetails[]> {
+    return this.http.get<StoreDetails[]>(GetAllStoreDetailsEndpoint).pipe(
+      map((store: StoreDetails[]) => {
+        return store;
+      }));
+  }
+
   getAllUsers(): Observable<UserDetails[]> {
     return this.http.get<UserDetails[]>(GetAllUsersEndpoint).pipe(
       map((users: UserDetails[]) => {
@@ -56,13 +63,13 @@ export class UserService {
       }));
   }
 
-  updateUserDetails(newName, newEmail, newPhoneno, role, username, store, userID): Observable<string> {
+  updateUserDetails(newName, newEmail, newPhoneno, password, role, username, store, userID): Observable<string> {
     const requestBody = {
-      name: newName, email: newEmail, phoneno: newPhoneno, role: role, username: username, store: store, id: userID
+      name: newName, email: newEmail, phoneno: newPhoneno, password: password, role: role, username: username, store: store, id: userID
     };
-    console.log(requestBody)
     return this.http.put(UpdateUserDetailsEndpoint, requestBody, {responseType: 'text'});
   }
+
   updateStoreDetails(newName, newPincode, newPhoneno, newAddress, newFB, newTW, newYT, userID): Observable<string> {
     const requestBody = {
       name: newName,
@@ -84,7 +91,7 @@ export class UserService {
     return this.http.put(ChangePasswordEndpoint, requestBody, {responseType: 'text'});
   }
 
-  addUser(userID, name, email, password, phoneno, storeid, role ): Observable<string> {
+  addUser(userID, name, email, password, phoneno, storeid, role): Observable<string> {
     const requestBody = {
       userID: userID, name: name, email: email, password: password, phoneno: phoneno, store: storeid, role: role
     };
@@ -99,11 +106,16 @@ export class UserService {
   }
 
   deleteUser(user: UserDetails): Observable<string> {
-    const deleteUser = DeleteUserEndpoint + '/' + user.id
+    const deleteUser = DeleteUserEndpoint + '/' + user.id;
     return this.http.delete(deleteUser, {responseType: 'text'});
   }
+
   deleteStore(store: StoreDetails): Observable<string> {
-    const deleteStore = DeleteStoreEndpoint + '/' + store.id
+    const deleteStore = DeleteStoreEndpoint + '/' + store.id;
     return this.http.delete(deleteStore, {responseType: 'text'});
+  }
+
+  profileImageUpload(form: any): Observable<any> {
+    return this.http.post(uploadProfileImageEndpoint, form, {responseType: 'text'});
   }
 }

@@ -3,11 +3,16 @@
   <div class="col-lg-12">
     <div class="card">
       <div class="card-body">
+        <div class="row" >
+            <h3>Products from store - {{storeName}}</h3>
+
+        </div>
         <ngb-tabset type="pills" class="custom-pills">
           <ngb-tab title="Products">
             <ng-template ngbTabContent>
               <br>
-              <div class="row">
+
+              <div class="row" *ngIf="showAddElements">
                 <div class="form-group">
                   <div class="col-md-12">
                     <form #formAddProduct>

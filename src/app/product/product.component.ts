@@ -18,21 +18,36 @@ export class ProductComponent implements OnInit {
   message = '';
   failMessage = false;
   successMessage = false;
-  private readonly notifier: NotifierService;
+  showAddElements = true;
 
-  constructor(private productService: ProductService) {}
+  constructor(private productService: ProductService, private routes: Router) {
+  }
 
   editing = {};
   rows = [];
   temp = [...this.rows];
-
+storeID;
+  storeName;
   loadingIndicator = true;
   reorderable = true;
 
   @ViewChild(DatatableComponent, {static: false}) table: DatatableComponent;
 
+  ngOnInit(): void {
+    if (!localStorage.getItem('userID')) {
+      this.showAddElements = false;
+    }
+    if (localStorage.getItem('storeID')) {
+      this.storeID = localStorage.getItem('storeID');
+      this.storeName = localStorage.getItem('storeName');
+      this.loadProducts();
+    } else {
+      this.routes.navigate(['/search']);
+    }
+  }
+
   loadProducts() {
-    this.productService.getProducts(localStorage.getItem('userID')).subscribe((products) => {
+    this.productService.getProducts(this.storeID).subscribe((products) => {
       this.rows = products;
       data = products;
       this.temp = [...data];
@@ -56,23 +71,28 @@ export class ProductComponent implements OnInit {
 
   updateValue(event, cell, rowIndex) {
     this.editing[rowIndex + '-' + cell] = false;
-    if (!event.target.value) {
-      alert('Cannot save empty fields')
-      return;
-    }
-    if (cell === 'weight' || cell === 'price' || cell === 'barcode') {
-      if (!(/^\d+$/.test(event.target.value))) {
-        alert('Please provide only numbers')
+    if (this.showAddElements) {
+      if (!event.target.value) {
+        alert('Cannot save empty fields');
         return;
       }
-    }
-    if (this.rows[rowIndex][cell] !== event.target.value) {
-      console.log('inline editing rowIndex', rowIndex);
-      this.editing[rowIndex + '-' + cell] = false;
-      this.rows[rowIndex][cell] = event.target.value;
-      this.rows = [...this.rows];
-      this.updateProduct(this.rows[rowIndex]);
-      console.log('UPDATED!', this.rows[rowIndex][cell]);
+      if (cell === 'weight' || cell === 'price' || cell === 'barcode') {
+        if (!(/^\d+$/.test(event.target.value))) {
+          alert('Please provide only numbers');
+          return;
+        }
+      }
+      if (this.rows[rowIndex][cell] !== event.target.value) {
+        console.log('inline editing rowIndex', rowIndex);
+        this.editing[rowIndex + '-' + cell] = false;
+        this.rows[rowIndex][cell] = event.target.value;
+        this.rows = [...this.rows];
+        this.updateProduct(this.rows[rowIndex]);
+        console.log('UPDATED!', this.rows[rowIndex][cell]);
+      }
+    } else {
+      this.failMessage = true;
+      this.message = 'Not authorised to edit products. Please login to edit.';
     }
   }
 
@@ -132,7 +152,5 @@ export class ProductComponent implements OnInit {
 
   }
 
-  ngOnInit(): void {
-    this.loadProducts();
-  }
+
 }

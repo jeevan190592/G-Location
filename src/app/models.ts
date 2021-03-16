@@ -9,6 +9,7 @@ export class UserDetails {
   store: string;
   phoneno: string;
   role: string;
+  image: string
 }
 
 export class StoreDetails {

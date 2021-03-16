@@ -52,21 +52,17 @@
         <div class="logo">
           <span class="db"><img src="assets/images/logo.png" alt="logo" width = "100%"/></span>
           <h5 class="font-medium m-b-20">Recover Password</h5>
-          <span>Enter your Email and instructions will be sent to you!</span>
+          <span>Please contact admin, if you forget the password.</span>
         </div>
         <div class="row m-t-20">
           <!-- Form -->
           <form class="col-12">
             <!-- email -->
-            <div class="form-group row">
-              <div class="col-12">
-                <input class="form-control form-control-lg" type="email" required="" placeholder="Email">
-              </div>
-            </div>
+
             <!-- pwd -->
             <div class="row m-t-20">
               <div class="col-12">
-                <button class="btn btn-block btn-lg btn-danger" type="submit" name="action">Reset</button>
+                <button class="btn btn-block btn-lg btn-danger"><a href="mailto:admin@g-location.com" style="cursor: pointer; text-decoration: none; font-color: white">Contact Admin</a></button>
                 <button class="btn btn-block btn-lg btn-success" type="submit" (click)="changeForm()">Login</button>
               </div>
             </div>

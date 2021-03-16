@@ -15,19 +15,23 @@
           <div class="col-12">
             <form class="form-horizontal m-t-20" id="loginform">
               <div *ngIf="msg" class="alert alert-danger">{{ msg }}</div>
+              <ng-template #rt let-r="result" let-t="term">
+                 {{ r.name }}, {{ r.pincode }}
+              </ng-template>
               <div class="form-group ">
                 <div class="col-xs-12">
-                  <input class="form-control" type="text" required="" placeholder="Store name" #u1></div>
-              </div>
-              <div class="form-group ">
-                <div class="col-xs-12">
-                  <input class="form-control" type="number" required="" placeholder="Pincode" #u1></div>
+                  <input class="form-control"
+                         id="typeahead-format"
+                         [ngbTypeahead]="storeNameSearch"
+                         [resultTemplate]="rt"
+                         [inputFormatter]="formatter"
+                         type="text" required="" placeholder="Store name, pincode" #storename></div>
               </div>
 
               <div class="form-group text-center m-t-20">
                 <div class="col-xs-12">
                   <button type="button" class="btn btn-info btn-lg btn-block text-uppercase"
-                          (click)="check(u1.value)">Search
+                          (click)="check(storename.value)">Search
                   </button>
                 </div>
               </div>

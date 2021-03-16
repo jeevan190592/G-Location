@@ -1,7 +1,6 @@
-import {Component, AfterViewInit, OnInit} from '@angular/core';
-import {ROUTES} from './menu-items';
-import {RouteInfo} from './sidebar.metadata';
-import {Router, ActivatedRoute, Routes} from '@angular/router';
+import {Component, OnInit} from '@angular/core';
+import {AdminRoutes, SearchRoutes, StoreManagerRoutes} from './menu-items';
+import {Router} from '@angular/router';
 import {NgbModal} from '@ng-bootstrap/ng-bootstrap';
 
 declare var $: any;
@@ -14,6 +13,7 @@ export class SidebarComponent implements OnInit {
   showMenu = '';
   showSubMenu = '';
   name;
+  showProfile = true;
   public sidebarnavItems: any[];
 
   // this is for the open close
@@ -42,49 +42,24 @@ export class SidebarComponent implements OnInit {
   // End open close
   ngOnInit() {
     this.name = localStorage.getItem('user');
-    if (localStorage.getItem('user')) {
-      const isAdmin = (localStorage.getItem('role') === 'Admin') ? true : false;
-      const isStoreManager = (localStorage.getItem('role') === 'Store Manager') ? true : false;
-      console.log(isStoreManager);
-      if (!isAdmin && !isStoreManager) {
+    if (localStorage.getItem('storeID')) {
+      if (localStorage.getItem('role')) {
 
-        ROUTES.forEach((element, index) => {
-          if (element.title === 'Logout') {
-            ROUTES.splice(index, 1);
-          }
-        });
-        ROUTES.forEach((element, index) => {
-          if (element.title === 'Profile') {
-            ROUTES.splice(index, 1);
-          }
-        });
+        switch (localStorage.getItem('role')) {
+          case 'Admin':
+            this.sidebarnavItems = AdminRoutes.filter(sidebarnavItem => sidebarnavItem);
+            break;
+          case 'Store Manager':
+            this.sidebarnavItems = StoreManagerRoutes.filter(sidebarnavItem => sidebarnavItem);
+            break;
+          default:
+            this.sidebarnavItems = SearchRoutes.filter(sidebarnavItem => sidebarnavItem);
+            break;
+        }
+      } else {
+        this.showProfile = false;
+        this.sidebarnavItems = SearchRoutes.filter(sidebarnavItem => sidebarnavItem);
       }
-      if (isAdmin) {
-        ROUTES.forEach((element, index) => {
-          if (element.title === 'Home') {
-            ROUTES.splice(index, 1);
-          }
-        });
-        ROUTES.forEach((element, index) => {
-          if (element.title === 'Login') {
-            ROUTES.splice(index, 1);
-          }
-        });
-        ROUTES.forEach((element, index) => {
-          if (element.title === 'Gallery') {
-            ROUTES.splice(index, 1);
-          }
-        });
-      }
-      if (isStoreManager) {
-        ROUTES.forEach((element, index) => {
-          if (element.title === 'Login') {
-            ROUTES.splice(index, 1);
-          }
-        });
-      }
-
-      this.sidebarnavItems = ROUTES.filter(sidebarnavItem => sidebarnavItem);
     } else {
       this.routes.navigate(['/search']);
     }

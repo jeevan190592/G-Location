@@ -13,10 +13,12 @@ export class ProductService {
   constructor(private http: HttpClient) {
   }
 
-  getProducts(userName: string): Observable<Products[]> {
-    const requestBody = {userName: userName};
-    return this.http.get<Products[]>(ProductEndpoint).pipe(
+  getProducts(storeID: string): Observable<Products[]> {
+    const endPoint = ProductEndpoint + '/' + storeID;
+    console.log(endPoint)
+    return this.http.get<Products[]>(endPoint).pipe(
       map((product: Products[]) => {
+        console.log(product)
         return product;
       }));
   }

@@ -11,10 +11,18 @@
           <ng-template ngbTabContent>
             <div class="card-body" *ngIf="user && store">
               <div class="m-t-30 text-center">
-                <img src="assets/images/logo.png" class="rounded-circle" width="150"/>
+
+                <img src="assets/images/user-default.png" class="rounded-circle" width="150" *ngIf="!user.image"/>
+                <img src="http://localhost:3000/{{user.image}}" class="rounded-circle" width="150" *ngIf="user.image"/>
                 <h4 class="card-title m-t-10">{{user.name}}</h4>
                 <h6 class="card-subtitle">{{user.role}} - {{store.name}}</h6>
-
+                <form #profileImageForm [formGroup]="form" enctype="multipart/form-data"
+                      (ngSubmit)="profileImageupload( profileImageForm )">
+                  <input type="file" name="profile" (change)="onChange($event)"/>
+                  <button class="btn btn-success" type="submit">
+                    Change Image
+                  </button>
+                </form>
               </div>
             </div>
             <div>
@@ -36,11 +44,7 @@
                 <br>
                 <p class="text-muted">{{user.email}}</p>
               </div>
-              <div class="col-md-3 col-xs-6">
-                <strong>Location</strong>
-                <br>
-                <p class="text-muted">London</p>
-              </div>
+
             </div>
             <div class="card-body">
 
@@ -196,7 +200,8 @@
                 <div class="form-group">
                   <div class="col-sm-12">
                     <button class="btn btn-success"
-                            (click)="changePassword(password.value, newPassword.value, reNewPassword.value, changePasswordForm)">Change
+                            (click)="changePassword(password.value, newPassword.value, reNewPassword.value, changePasswordForm)">
+                      Change
                       Password
                     </button>
                   </div>
@@ -233,32 +238,38 @@
                 <div class="form-group">
                   <label class="col-md-12">Phone No</label>
                   <div class="col-md-12">
-                    <input type="number" placeholder="123 456 7890" class="form-control form-control-line" #storePhoneno>
+                    <input type="number" placeholder="123 456 7890" class="form-control form-control-line"
+                           #storePhoneno>
                   </div>
                 </div>
                 <div class="form-group">
                   <label class="col-md-12">Facebook URL</label>
                   <div class="col-md-12">
-                    <input type="text" placeholder="facebook.com/user" class="form-control form-control-line" #storeFBURL>
+                    <input type="text" placeholder="facebook.com/user" class="form-control form-control-line"
+                           #storeFBURL>
                   </div>
                 </div>
                 <div class="form-group">
                   <label class="col-md-12">Twitter URL</label>
                   <div class="col-md-12">
-                    <input type="text" placeholder="twitter.com/user" class="form-control form-control-line" #storeTwitterURL>
+                    <input type="text" placeholder="twitter.com/user" class="form-control form-control-line"
+                           #storeTwitterURL>
                   </div>
                 </div>
                 <div class="form-group">
                   <label class="col-md-12">Youtube URL</label>
                   <div class="col-md-12">
-                    <input type="text" placeholder="youtube.com/user" class="form-control form-control-line" #storeYoutubeURL>
+                    <input type="text" placeholder="youtube.com/user" class="form-control form-control-line"
+                           #storeYoutubeURL>
                   </div>
                 </div>
 
                 <div class="form-group">
                   <div class="col-sm-12">
                     <button class="btn btn-success"
-                            (click)="addStore(storeName.value, storePhoneno.value, storePincode.value, storeFBURL.value, storeTwitterURL.value, storeYoutubeURL.value, storeAddress.value, addStoreForm)">Add Store</button>
+                            (click)="addStore(storeName.value, storePhoneno.value, storePincode.value, storeFBURL.value, storeTwitterURL.value, storeYoutubeURL.value, storeAddress.value, addStoreForm)">
+                      Add Store
+                    </button>
                   </div>
                 </div>
                 <div *ngIf="successMessage" class="alert alert-success">{{ message }}</div>
@@ -299,29 +310,33 @@
                 <div class="form-group">
                   <label class="col-md-12">Phone No</label>
                   <div class="col-md-12">
-                    <input type="number" placeholder="123 456 7890" class="form-control form-control-line" #newUserPhoneNo>
+                    <input type="number" placeholder="123 456 7890" class="form-control form-control-line"
+                           #newUserPhoneNo>
                   </div>
                 </div>
                 <div class="form-group" *ngIf="stores">
                   <label class="col-sm-12">Select Store</label>
                   <div class="col-sm-12">
-                    <select class="form-control form-control-line" (change)="changeStoreSelected($event.target)" >
-                      <option *ngFor="let storeItem of stores" [value]="storeItem.id" >{{storeItem.name}}</option>
+                    <select class="form-control form-control-line" (change)="changeStoreSelected($event.target)">
+                      <option *ngFor="let storeItem of stores" [value]="storeItem.id">{{storeItem.name}}</option>
                     </select>
                   </div>
                 </div>
                 <div class="form-group">
                   <label class="col-sm-12">Role</label>
                   <div class="col-sm-12">
-                    <select class="form-control form-control-line" (change)="changeRoleSelected($event.target)" >
-                      <option value="Admin" >Admin</option>
-                      <option value="Store Manager" >Store Manager</option>
+                    <select class="form-control form-control-line" (change)="changeRoleSelected($event.target)">
+                      <option value="Admin">Admin</option>
+                      <option value="Store Manager">Store Manager</option>
                     </select>
                   </div>
                 </div>
                 <div class="form-group">
                   <div class="col-sm-12">
-                    <button class="btn btn-success" (click)="addUser(newUserID.value, newUserName.value, newUserEmail.value, newUserPassword.value, newUserPhoneNo.value, newUserForm)">Update Profile</button>
+                    <button class="btn btn-success"
+                            (click)="addUser(newUserID.value, newUserName.value, newUserEmail.value, newUserPassword.value, newUserPhoneNo.value, newUserForm)">
+                      Update Profile
+                    </button>
                   </div>
                 </div>
                 <div *ngIf="successMessage" class="alert alert-success">{{ message }}</div>
@@ -358,6 +373,18 @@
               </span>
                   <input autofocus (blur)="updateValue($event, 'email', rowIndex)"
                          *ngIf="editing[rowIndex+ '-email']"
+                         type="email" [value]="value"
+                  />
+                </ng-template>
+              </ngx-datatable-column>
+              <ngx-datatable-column name="password">
+                <ng-template ngx-datatable-cell-template let-rowIndex="rowIndex" let-row="row" let-value="value">
+              <span title="Double click to edit" (dblclick)="editing[rowIndex + '-password'] = true"
+                    *ngIf="!editing[rowIndex + '-password']">
+                {{value}}
+              </span>
+                  <input autofocus (blur)="updateValue($event, 'password', rowIndex)"
+                         *ngIf="editing[rowIndex+ '-password']"
                          type="text" [value]="value"
                   />
                 </ng-template>
@@ -392,7 +419,8 @@
                     *ngIf="!editing[rowIndex + '-username']">
                 {{value}}
               </span>
-                  <input autofocus (blur)="updateValue($event, 'username', rowIndex)" *ngIf="editing[rowIndex+ '-username']"
+                  <input autofocus (blur)="updateValue($event, 'username', rowIndex)"
+                         *ngIf="editing[rowIndex+ '-username']"
                          type="text" [value]="value"
                   />
                 </ng-template>
@@ -403,16 +431,18 @@
                     *ngIf="!editing[rowIndex + '-store']">
                 {{value}}
               </span>
-                  <select *ngIf="editing[rowIndex + '-store']" (change)="updateValue($event, 'store', rowIndex)" [value]="value">
-                    <option value="" >Select Store</option>
-                    <option *ngFor="let storeItem of stores" [value]="storeItem.id" >{{storeItem.name}}</option>
+                  <select *ngIf="editing[rowIndex + '-store']" (change)="updateValue($event, 'store', rowIndex)"
+                          [value]="value">
+                    <option value="">Select Store</option>
+                    <option *ngFor="let storeItem of stores" [value]="storeItem.id">{{storeItem.name}}</option>
                   </select>
                 </ng-template>
               </ngx-datatable-column>
               <ngx-datatable-column>
                 <ng-template ngx-datatable-cell-template let-rowIndex="rowIndex" let-row="row" let-value="value">
 
-                  <a style="cursor: pointer" tooltip="Click to delete" (click)="deleteUser(rowIndex)"><i class="fas fa-trash-alt"></i></a>
+                  <a style="cursor: pointer" tooltip="Click to delete" (click)="deleteUser(rowIndex)"><i
+                    class="fas fa-trash-alt"></i></a>
 
                 </ng-template>
               </ngx-datatable-column>

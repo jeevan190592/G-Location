@@ -65,6 +65,25 @@ Router.delete("/deleteImage/:id/:storeid/:name", (req, res) => {
 
 // users
 
+Router.post("/uploadProfileImage", cors(), upload.single("file"), (req, res) => {
+  var body = req.body
+  const file = req.file;
+  if (file) {
+    mySqlConnection.query("UPDATE users set image = ? where id = ? ",
+      [req.file.filename, body.id], (err, rows, fields) => {
+        if (!err) {
+
+          res.send('success');
+        } else {
+          res.send('Error');
+          console.log(err)
+        }
+      })
+  } else {
+    res.send('Error');
+  }
+})
+
 Router.get("/getAllusers", (req, res) => {
   mySqlConnection.query("SELECT * from users", (err, rows, fields) => {
     if (!err) {
@@ -129,8 +148,8 @@ Router.get("/getUserDetails/:id", (req, res) => {
 
 Router.put("/updateUserDetails", (req, res) => {
   var body = req.body;
-  mySqlConnection.query("Update users set name = ?, email = ?, phoneno = ?, role = ?, username = ?, store = ?  where id = ?",
-    [body.name, body.email, body.phoneno, body.role, body.username, body.store, body.id], (err, rows, fields) => {
+  mySqlConnection.query("Update users set name = ?, email = ?, phoneno = ?, password= ?,role = ?, username = ?, store = ?  where id = ?",
+    [body.name, body.email, body.phoneno, body.password, body.role, body.username, body.store, body.id], (err, rows, fields) => {
       if (!err) {
         res.send('success');
       } else {
@@ -165,8 +184,8 @@ Router.delete("/deleteUser/:id", (req, res) => {
 })
 
 // products
-Router.get("/products", (req, res) => {
-  mySqlConnection.query("SELECT * from products", (err, rows, fields) => {
+Router.get("/products/:storeid", (req, res) => {
+  mySqlConnection.query("SELECT * from products where store_id = ?", [req.params.storeid], (err, rows, fields) => {
     if (!err) {
       res.send(rows);
     } else {
@@ -234,7 +253,15 @@ Router.get("/getAllStoreDetails/", (req, res) => {
   })
 })
 
-
+Router.get("/getAllStoreDetailsWithName", (req, res) => {
+  mySqlConnection.query("SELECT name from stores", (err, rows, fields) => {
+    if (!err) {
+      res.send(rows);
+    } else {
+      console.log(err);
+    }
+  })
+})
 
 Router.put("/updateStoreDetails", (req, res) => {
   var body = req.body;
