@@ -183,6 +183,16 @@ Router.delete("/deleteUser/:id", (req, res) => {
   })
 })
 
+Router.get("/getUserID/:storeid", (req, res) => {
+  mySqlConnection.query("SELECT * from users where store = ?", [req.params.storeid], (err, rows, fields) => {
+    if (!err) {
+      res.send(rows[0]);
+    } else {
+      console.log(err);
+    }
+  })
+})
+
 // products
 Router.get("/products/:storeid", (req, res) => {
   mySqlConnection.query("SELECT * from products where store_id = ?", [req.params.storeid], (err, rows, fields) => {

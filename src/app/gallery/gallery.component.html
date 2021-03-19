@@ -26,7 +26,8 @@
           <div class="card-body">
             <h4 class="card-title">{{item.title}}</h4>
             <p class="card-text">{{item.description}}</p>
-            <button class="btn btn-danger" (click)="deleteImage(item.id, item.filename, item.title)">Delete</button>
+            <div *ngIf="showAddElements">
+            <button class="btn btn-danger" (click)="deleteImage(item.id, item.filename, item.title) ">Delete</button></div>
           </div>
         </div>
         <!-- Card -->

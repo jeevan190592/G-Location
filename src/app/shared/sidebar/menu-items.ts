@@ -74,6 +74,14 @@ export const SearchRoutes: RouteInfo[] = [
     submenu: []
   },
   {
+    path: '/profile',
+    title: 'Profile',
+    icon: '',
+    class: '',
+    extralink: false,
+    submenu: []
+  },
+  {
     path: '/login',
     title: 'Login',
     icon: '',

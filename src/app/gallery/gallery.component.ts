@@ -73,8 +73,9 @@ export class GalleryComponent implements OnInit {
     this.galleryService.loadGallery(storeID).subscribe((images: Gallery[]) => {
       if (images.length !== 0) {
         this.items = images;
-        console.log(images);
+        this.showMessage = false;
       } else {
+        this.items = [];
         this.showMessage = true;
       }
     });

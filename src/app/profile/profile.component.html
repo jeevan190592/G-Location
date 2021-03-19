@@ -17,7 +17,7 @@
                 <h4 class="card-title m-t-10">{{user.name}}</h4>
                 <h6 class="card-subtitle">{{user.role}} - {{store.name}}</h6>
                 <form #profileImageForm [formGroup]="form" enctype="multipart/form-data"
-                      (ngSubmit)="profileImageupload( profileImageForm )">
+                      (ngSubmit)="profileImageupload( profileImageForm )" *ngIf="!readOnly">
                   <input type="file" name="profile" (change)="onChange($event)"/>
                   <button class="btn btn-success" type="submit">
                     Change Image
@@ -63,9 +63,9 @@
             </div>
           </ng-template>
         </ngb-tab>
-        <ngb-tab title="Update details">
+        <ngb-tab title="Update details" *ngIf="!readOnly">
           <ng-template ngbTabContent>
-            <div class="card-body" *ngIf="user">
+            <div class="card-body" >
               <form class="form-horizontal form-material">
                 <div class="form-group">
                   <label class="col-md-12">Full Name</label>
@@ -104,7 +104,7 @@
             </div>
           </ng-template>
         </ngb-tab>
-        <ngb-tab title="Store details" *ngIf="!isAdmin">
+        <ngb-tab title="Store details" *ngIf="!isAdmin && !readOnly">
           <ng-template ngbTabContent>
             <div class="card-body" *ngIf="store">
               <form class="form-horizontal form-material">
@@ -125,7 +125,7 @@
                 </div>
 
                 <div class="form-group">
-                  <label class="col-md-12">Pincode</label>
+                  <label class="col-md-12">Phone No</label>
                   <div class="col-md-12">
                     <input type="text" placeholder="123 456 7890" value="{{store.phoneno}}"
                            class="form-control form-control-line" #storePhoneno>
@@ -174,7 +174,7 @@
             </div>
           </ng-template>
         </ngb-tab>
-        <ngb-tab title="Change Password">
+        <ngb-tab title="Change Password" *ngIf="!readOnly">
           <ng-template ngbTabContent>
             <div class="card-body">
               <form class="form-horizontal form-material" #changePasswordForm>

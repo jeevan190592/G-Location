@@ -32,6 +32,7 @@ export class ProfileComponent implements OnInit {
   editing = {};
   userRows = [];
   temp = [...this.userRows];
+  readOnly = true;
 
   @ViewChild(DatatableComponent, {static: false}) table: DatatableComponent;
 
@@ -41,7 +42,11 @@ export class ProfileComponent implements OnInit {
     this.storeID = localStorage.getItem('storeID');
     this.isAdmin = ( localStorage.getItem('role') === 'Admin' ) ? true : false;
 
-    if (this.loggedUserID) {
+    if (this.storeID && !this.loggedUserID) {
+      this.getUserDetails(this.storeID);
+      this.loadStoreDetails(this.storeID);
+    } else if (this.storeID && this.loggedUserID) {
+      this.readOnly = false;
       this.loadProfile(this.loggedUserID);
       this.loadStoreDetails(this.storeID);
     } else {
@@ -51,6 +56,16 @@ export class ProfileComponent implements OnInit {
     this.getUsers();
     this.form = this.formBuilder.group({
       profile: ['']
+    });
+  }
+
+  getUserDetails(storeID) {
+    console.log(storeID)
+    this.userService.getUserID(storeID).subscribe((user: UserDetails) => {
+      if (user) {
+        this.user = user;
+        console.log(user);
+      }
     });
   }
 

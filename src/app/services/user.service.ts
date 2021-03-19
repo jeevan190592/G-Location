@@ -13,7 +13,7 @@ import {
   GetAllStoreDetailsEndpoint,
   GetAllUsersEndpoint,
   GetStoreDetailsEndpoint,
-  GetUserDetailsEndpoint,
+  GetUserDetailsEndpoint, GetUserIDEndpoint,
   UpdateStoreDetailsEndpoint,
   UpdateUserDetailsEndpoint, uploadImageEndpoint, uploadProfileImageEndpoint
 } from '../constants';
@@ -117,5 +117,10 @@ export class UserService {
 
   profileImageUpload(form: any): Observable<any> {
     return this.http.post(uploadProfileImageEndpoint, form, {responseType: 'text'});
+  }
+
+  getUserID(storeID: string): Observable<UserDetails> {
+    const GetUser = GetUserIDEndpoint + '/' + storeID;
+    return this.http.get<UserDetails>(GetUser);
   }
 }

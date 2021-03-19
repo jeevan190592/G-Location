@@ -20,4 +20,5 @@ export const GetAllUsersEndpoint: string = ApiHost + 'getAllUsers'
 export const UpdateUserDetailsEndpoint: string = ApiHost + 'updateUserDetails'
 export const UpdateStoreDetailsEndpoint: string = ApiHost + 'updateStoreDetails'
 export const ChangePasswordEndpoint: string = ApiHost + 'changePassword'
+export const GetUserIDEndpoint: string = ApiHost + 'getUserID'
 

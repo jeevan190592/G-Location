@@ -113,7 +113,7 @@ storeID;
   }
 
   addProduct(name: string, barcode: string, location: string, price: string, weight: string, form: any) {
-    if (name && barcode && location && price && weight) {
+    if (name && location && price && weight) {
       this.productService.addProduct(name, barcode, location, price, weight).subscribe((result: string) => {
         if (result === 'success') {
           this.loadProducts();
