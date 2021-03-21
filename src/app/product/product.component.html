@@ -96,7 +96,7 @@
                     />
                   </ng-template>
                 </ngx-datatable-column>
-                <ngx-datatable-column>
+                <ngx-datatable-column *ngIf="showAddElements">
                   <ng-template ngx-datatable-cell-template let-rowIndex="rowIndex" let-row="row" let-value="value">
 
                     <a style="cursor: pointer" tooltip="Click to delete" (click)="deleteProduct(rowIndex)"><i class="fas fa-trash-alt"></i></a>

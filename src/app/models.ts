@@ -17,12 +17,12 @@ export class StoreDetails {
   created: string
   updated: string
   name: string
-  pincode: string
+  pincode: number
   phoneno: string
   address: string;
   facebookURL: string;
   twitterURL: string;
-  youtubeURL: string
+  youtubeURL: string;
 }
 
 

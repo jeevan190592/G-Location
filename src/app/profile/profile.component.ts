@@ -26,6 +26,7 @@ export class ProfileComponent implements OnInit {
   newUserRoleSelected: string;
   isAdmin: boolean;
   form: FormGroup;
+
   constructor(private formBuilder: FormBuilder, private userService: UserService, private routes: Router) {
   }
 
@@ -40,7 +41,7 @@ export class ProfileComponent implements OnInit {
     this.loggedUserID = localStorage.getItem('userID');
     this.loggedUserName = localStorage.getItem('userName');
     this.storeID = localStorage.getItem('storeID');
-    this.isAdmin = ( localStorage.getItem('role') === 'Admin' ) ? true : false;
+    this.isAdmin = (localStorage.getItem('role') === 'Admin') ? true : false;
 
     if (this.storeID && !this.loggedUserID) {
       this.getUserDetails(this.storeID);
@@ -60,7 +61,7 @@ export class ProfileComponent implements OnInit {
   }
 
   getUserDetails(storeID) {
-    console.log(storeID)
+    console.log(storeID);
     this.userService.getUserID(storeID).subscribe((user: UserDetails) => {
       if (user) {
         this.user = user;
@@ -112,7 +113,7 @@ export class ProfileComponent implements OnInit {
     store = store ? store : this.storeID;
     password = password ? password : localStorage.getItem('password');
     if (this.user.name !== newName || this.user.email !== newEmail || this.user.phoneno !== newPhoneno ||
-      this.user.password !== password  || this.user.role !== role || this.user.username !== username || this.user.store !== store ) {
+      this.user.password !== password || this.user.role !== role || this.user.username !== username || this.user.store !== store) {
       this.userService.updateUserDetails(newName, newEmail, newPhoneno, password, role, username, store, this.loggedUserID)
         .subscribe((res: string) => {
           if (res === 'success') {
@@ -202,13 +203,20 @@ export class ProfileComponent implements OnInit {
 
 
   addUser(userID, name, email, password, phoneno, form) {
+    if (this.newUserRoleSelected !== 'Admin' && !this.newUserStoreSelected) {
+      this.failMessage = true;
+      this.message = 'Store information is mandatory';
+      return;
+    }
     this.userService.addUser(userID, name, email, password, phoneno, this.newUserStoreSelected, this.newUserRoleSelected)
       .subscribe((res) => {
         if (res) {
           if (res === 'success') {
             console.log(res);
             this.successMessage = true;
+            this.failMessage = false;
             this.message = 'User added successfully in database';
+            this.getUsers();
             form.reset();
           } else {
             this.failMessage = true;
@@ -223,12 +231,23 @@ export class ProfileComponent implements OnInit {
   }
 
   addStore(name, phoneno, pincode, FB, Twitter, Youtube, address, form) {
+    this.getStores();
+    for (const store of this.stores) {
+      if (store.name === name && store.pincode === Number(pincode)) {
+        this.failMessage = true;
+        this.message = 'Store is already available with the same name and pincode';
+        return;
+      }
+    }
+
     this.userService.addStore(name, phoneno, pincode, FB, Twitter, Youtube, address).subscribe((res) => {
       if (res) {
         if (res === 'success') {
           console.log(res);
           this.successMessage = true;
+          this.failMessage = false;
           this.message = 'Store added successfully in database';
+          this.getStores();
           form.reset();
         } else {
           this.failMessage = true;
@@ -305,6 +324,7 @@ export class ProfileComponent implements OnInit {
     }
     console.log(this.form.get('profile').value);
   }
+
   profileImageupload(form) {
     const formData = new FormData();
     formData.append('file', this.form.get('profile').value);
