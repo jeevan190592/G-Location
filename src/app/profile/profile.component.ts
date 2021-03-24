@@ -16,6 +16,7 @@ export class ProfileComponent implements OnInit {
   user: UserDetails;
   store: StoreDetails;
   stores: StoreDetails[];
+  allManagersInstore: UserDetails[];
   message = '';
   failMessage = false;
   successMessage = false;
@@ -43,16 +44,17 @@ export class ProfileComponent implements OnInit {
     this.storeID = localStorage.getItem('storeID');
     this.isAdmin = (localStorage.getItem('role') === 'Admin') ? true : false;
 
-    if (this.storeID && !this.loggedUserID) {
-      this.getUserDetails(this.storeID);
-      this.loadStoreDetails(this.storeID);
-    } else if (this.storeID && this.loggedUserID) {
+    if (this.storeID && this.loggedUserID) {
       this.readOnly = false;
       this.loadProfile(this.loggedUserID);
-      this.loadStoreDetails(this.storeID);
+    } else if (this.storeID && !this.loggedUserID) {
+      this.readOnly = true;
+      this.getUserDetails(this.storeID);
+      this.getAllManagersInStore(this.storeID);
     } else {
       this.routes.navigate(['/login']);
     }
+    this.loadStoreDetails(this.storeID);
     this.getStores();
     this.getUsers();
     this.form = this.formBuilder.group({
@@ -78,6 +80,15 @@ export class ProfileComponent implements OnInit {
     });
   }
 
+  getAllManagersInStore(storeID) {
+    this.userService.getAllManagersInStore(storeID).subscribe((users: UserDetails[]) => {
+      if (users) {
+        this.allManagersInstore = users;
+        console.log('AllUsers - ', users);
+      }
+    });
+  }
+
   getUsers() {
     this.userService.getAllUsers().subscribe((users: UserDetails[]) => {
       if (users) {
@@ -94,6 +105,8 @@ export class ProfileComponent implements OnInit {
       if (userDetails) {
         this.user = userDetails;
         localStorage.setItem('user', this.user.name);
+        this.allManagersInstore = [];
+        this.allManagersInstore[0] = userDetails;
       }
     });
 

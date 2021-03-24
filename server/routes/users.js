@@ -193,6 +193,17 @@ Router.get("/getUserID/:storeid", (req, res) => {
   })
 })
 
+
+Router.get("/getAllManagersInStore/:storeid", (req, res) => {
+  mySqlConnection.query("SELECT * from users where store = ?", [req.params.storeid], (err, rows, fields) => {
+    if (!err) {
+      res.send(rows);
+    } else {
+      console.log(err);
+    }
+  })
+})
+
 // products
 Router.get("/products/:storeid", (req, res) => {
   mySqlConnection.query("SELECT * from products where store_id = ?", [req.params.storeid], (err, rows, fields) => {
@@ -262,6 +273,7 @@ Router.get("/getAllStoreDetails/", (req, res) => {
     }
   })
 })
+
 
 Router.get("/getAllStoreDetailsWithName", (req, res) => {
   mySqlConnection.query("SELECT name from stores", (err, rows, fields) => {

@@ -9,7 +9,7 @@ import {
   ChangePasswordEndpoint,
   DeleteProductEndpoint,
   DeleteStoreEndpoint,
-  DeleteUserEndpoint,
+  DeleteUserEndpoint, GetAllManagersInStoreEndpoint,
   GetAllStoreDetailsEndpoint,
   GetAllUsersEndpoint,
   GetStoreDetailsEndpoint,
@@ -46,6 +46,13 @@ export class UserService {
     return this.http.get<StoreDetails[]>(GetAllStoreDetailsEndpoint).pipe(
       map((store: StoreDetails[]) => {
         return store;
+      }));
+  }
+  getAllManagersInStore(storeID): Observable<UserDetails[]> {
+    const api = GetAllManagersInStoreEndpoint + '/' + storeID;
+    return this.http.get<UserDetails[]>(api).pipe(
+      map((users: UserDetails[]) => {
+        return users;
       }));
   }
 

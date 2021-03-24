@@ -6,66 +6,64 @@
   <div class="col-lg-8 col-xlg-9 col-md-7">
     <div class="card">
       <ngb-tabset type="pills" class="custom-pills">
-
         <ngb-tab title="Profile">
           <ng-template ngbTabContent>
             <div class="card-body" *ngIf="user && store">
-              <div class="m-t-30 text-center">
-
-                <img src="assets/images/user-default.png" class="rounded-circle" width="150" *ngIf="!user.image"/>
-                <img src="http://localhost:3000/{{user.image}}" class="rounded-circle" width="150" *ngIf="user.image"/>
-                <h4 class="card-title m-t-10">{{user.name}}</h4>
-                <h6 class="card-subtitle">{{user.role}} - {{store.name}}</h6>
-                <form #profileImageForm [formGroup]="form" enctype="multipart/form-data"
-                      (ngSubmit)="profileImageupload( profileImageForm )" *ngIf="!readOnly">
-                  <input type="file" name="profile" (change)="onChange($event)"/>
-                  <button class="btn btn-success" type="submit">
-                    Change Image
+              <div *ngFor="let user of allManagersInstore">
+                <div class="m-t-30 text-center">
+                  <img src="assets/images/user-default.png" class="rounded-circle" width="150" *ngIf="!user.image"/>
+                  <img src="http://localhost:3000/{{user.image}}" class="rounded-circle" width="150"
+                       *ngIf="user.image"/>
+                  <h4 class="card-title m-t-10">{{user.name}}</h4>
+                  <h6 class="card-subtitle">{{user.role}} - {{store.name}}</h6>
+                  <form #profileImageForm [formGroup]="form" enctype="multipart/form-data"
+                        (ngSubmit)="profileImageupload( profileImageForm )" *ngIf="!readOnly">
+                    <input type="file" name="profile" (change)="onChange($event)"/>
+                    <button class="btn btn-success" type="submit">
+                      Change Image
+                    </button>
+                  </form>
+                </div>
+                <div>
+                  <hr>
+                </div>
+                <div class="row" *ngIf="user">
+                  <div class="col-md-3 col-xs-6 b-r" style="padding-left: 20px;">
+                    <strong>Full Name</strong>
+                    <br>
+                    <p class="text-muted">{{user.name}}</p>
+                  </div>
+                  <div class="col-md-3 col-xs-6 b-r">
+                    <strong>Mobile</strong>
+                    <br>
+                    <p class="text-muted">{{user.phoneno}}</p>
+                  </div>
+                  <div class="col-md-3 col-xs-6 b-r">
+                    <strong>Email</strong>
+                    <br>
+                    <p class="text-muted">{{user.email}}</p>
+                  </div>
+                </div>
+                <div class="card-body">
+                  <small class="text-muted p-t-30 db">Social Profile</small>
+                  <br/>
+                  <button class="btn btn-circle btn-secondary">
+                    <i class="fab fa-facebook"></i>
                   </button>
-                </form>
+                  <button class="btn btn-circle btn-secondary">
+                    <i class="fab fa-twitter"></i>
+                  </button>
+                  <button class="btn btn-circle btn-secondary">
+                    <i class="fab fa-youtube"></i>
+                  </button>
+                </div>
               </div>
-            </div>
-            <div>
-              <hr>
-            </div>
-            <div class="row" *ngIf="user">
-              <div class="col-md-3 col-xs-6 b-r" style="padding-left: 20px;">
-                <strong>Full Name</strong>
-                <br>
-                <p class="text-muted">{{user.name}}</p>
-              </div>
-              <div class="col-md-3 col-xs-6 b-r">
-                <strong>Mobile</strong>
-                <br>
-                <p class="text-muted">{{user.phoneno}}</p>
-              </div>
-              <div class="col-md-3 col-xs-6 b-r">
-                <strong>Email</strong>
-                <br>
-                <p class="text-muted">{{user.email}}</p>
-              </div>
-
-            </div>
-            <div class="card-body">
-
-
-              <small class="text-muted p-t-30 db">Social Profile</small>
-              <br/>
-              <button class="btn btn-circle btn-secondary">
-                <i class="fab fa-facebook"></i>
-              </button>
-              <button class="btn btn-circle btn-secondary">
-                <i class="fab fa-twitter"></i>
-              </button>
-              <button class="btn btn-circle btn-secondary">
-                <i class="fab fa-youtube"></i>
-              </button>
             </div>
           </ng-template>
         </ngb-tab>
         <ngb-tab title="Update details" *ngIf="!readOnly">
           <ng-template ngbTabContent>
-            <div class="card-body" >
+            <div class="card-body">
               <form class="form-horizontal form-material">
                 <div class="form-group">
                   <label class="col-md-12">Full Name</label>
