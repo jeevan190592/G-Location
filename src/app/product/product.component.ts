@@ -132,6 +132,15 @@ export class ProductComponent implements OnInit {
   }
 
   addProduct(name: string, barcode: string, location: string, price: string, weight: string, form: any) {
+    if (barcode) {
+      for (const product of this.rows) {
+        if (product.barcode === barcode) {
+          this.failMessage = true;
+          this.message = 'Duplicate Barcode ';
+          return;
+        }
+      }
+    }
     if (name && location && price && weight) {
       this.productService.addProduct(name, barcode, location, price, weight).subscribe((result: string) => {
         if (result === 'success') {
