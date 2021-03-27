@@ -1,12 +1,15 @@
-import { NgModule } from '@angular/core';
-import { CommonModule } from '@angular/common';
-import { FormsModule } from '@angular/forms';
-import { Routes, RouterModule } from '@angular/router';
+import {NgModule} from '@angular/core';
+import {CommonModule} from '@angular/common';
+import {FormsModule} from '@angular/forms';
+import {Routes, RouterModule} from '@angular/router';
 
-import { ProductComponent } from './product.component';
+import {ProductComponent} from './product.component';
 import {NgxDatatableModule} from '@swimlane/ngx-datatable';
 import {NgbModule} from '@ng-bootstrap/ng-bootstrap';
-import { NotifierModule } from 'angular-notifier';
+import {NotifierModule} from 'angular-notifier';
+
+import {BarcodeScannerLivestreamOverlayModule} from 'ngx-barcode-scanner';
+
 const routes: Routes = [
   {
     path: '',
@@ -18,7 +21,16 @@ const routes: Routes = [
 ];
 
 @NgModule({
-  imports: [FormsModule, CommonModule, RouterModule.forChild(routes), NgxDatatableModule, NgbModule, NotifierModule],
+  imports: [
+    BarcodeScannerLivestreamOverlayModule,
+    FormsModule,
+    CommonModule,
+    RouterModule.forChild(routes),
+    NgxDatatableModule,
+    NgbModule,
+    NotifierModule
+  ],
   declarations: [ProductComponent]
 })
-export class ProductModule {}
+export class ProductModule {
+}

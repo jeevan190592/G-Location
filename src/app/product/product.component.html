@@ -3,8 +3,8 @@
   <div class="col-lg-12">
     <div class="card">
       <div class="card-body">
-        <div class="row" >
-            <h3>Products from store - {{storeName}}</h3>
+        <div class="row">
+          <h3>Products from store - {{storeName}}</h3>
 
         </div>
         <ngb-tabset type="pills" class="custom-pills">
@@ -17,15 +17,23 @@
                   <div class="col-md-12">
                     <form #formAddProduct>
                       <input type="text" class="form" placeholder="Product Name" name="p_name" #p_name> &nbsp;
-                      <input type="number" class="form" placeholder="Barcode" name="p_barcode" #p_barcode> &nbsp;
+                      <input type="number" class="form" placeholder="Barcode" name="p_barcode" [value]=barcodeValue readonly="readonly" #p_barcode> &nbsp;
                       <input type="number" class="form" placeholder="Weight" name="p_weight" #p_weight> &nbsp;
                       <input type="text" class="form" placeholder="Location" name="p_location" #p_location> &nbsp;
                       <input type="number" class="form" placeholder="Price" name="p_price" #p_price> &nbsp;
                       <button class="btn btn-success"
+                              (click)="startBarcodeScannerOverlay()">
+                        Scan Barcode
+                      </button> &nbsp;
+                      <button class="btn btn-success"
                               (click)="addProduct(p_name.value, p_barcode.value, p_location.value, p_price.value, p_weight.value, formAddProduct)">
                         Add Product
                       </button>
-                      <img src="../assets/images/transparent_barcode.png" width="80" height="40"/>
+                      <barcode-scanner-livestream-overlay
+                        [type]="['code_128', 'code_39', 'ean_8']"
+                        (valueChanges)="onValueChanges($event)"
+                        (started)="onStarted($event)"
+                      ></barcode-scanner-livestream-overlay>
                     </form>
                   </div>
                 </div>
@@ -100,7 +108,8 @@
                 <ngx-datatable-column *ngIf="showAddElements">
                   <ng-template ngx-datatable-cell-template let-rowIndex="rowIndex" let-row="row" let-value="value">
 
-                    <a style="cursor: pointer" tooltip="Click to delete" (click)="deleteProduct(rowIndex)"><i class="fas fa-trash-alt"></i></a>
+                    <a style="cursor: pointer" tooltip="Click to delete" (click)="deleteProduct(rowIndex)"><i
+                      class="fas fa-trash-alt"></i></a>
 
                   </ng-template>
                 </ngx-datatable-column>

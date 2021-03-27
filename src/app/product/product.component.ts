@@ -1,10 +1,11 @@
-import {Component, OnInit, ViewChild} from '@angular/core';
+import {AfterViewInit, Component, OnInit, ViewChild} from '@angular/core';
 import {DatatableComponent} from '@swimlane/ngx-datatable';
 import {LoginService} from '../services/login.service';
 import {Router} from '@angular/router';
 import {ProductService} from '../services/product.service';
 import {Products} from '../models';
 import {NotifierService} from 'angular-notifier';
+import {BarcodeScannerLivestreamComponent, BarcodeScannerLivestreamOverlayComponent} from 'ngx-barcode-scanner';
 
 declare var require: any;
 let data: any;
@@ -23,15 +24,33 @@ export class ProductComponent implements OnInit {
   constructor(private productService: ProductService, private routes: Router) {
   }
 
+
   editing = {};
   rows = [];
   temp = [...this.rows];
-storeID;
+  storeID;
   storeName;
   loadingIndicator = true;
   reorderable = true;
 
   @ViewChild(DatatableComponent, {static: false}) table: DatatableComponent;
+  @ViewChild(BarcodeScannerLivestreamOverlayComponent)
+  barcodeScannerOverlay: BarcodeScannerLivestreamOverlayComponent;
+
+  barcodeValue: string;
+
+  startBarcodeScannerOverlay(): void {
+    this.barcodeScannerOverlay.show();
+  }
+
+  onValueChanges(result): void {
+    this.barcodeValue = result.codeResult.code;
+    this.barcodeScannerOverlay.hide();
+  }
+
+  onStarted(event: boolean): void {
+    console.log('started', event);
+  }
 
   ngOnInit(): void {
     if (!localStorage.getItem('userID')) {
