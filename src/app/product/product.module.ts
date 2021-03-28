@@ -1,6 +1,6 @@
 import {NgModule} from '@angular/core';
 import {CommonModule} from '@angular/common';
-import {FormsModule} from '@angular/forms';
+import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import {Routes, RouterModule} from '@angular/router';
 
 import {ProductComponent} from './product.component';
@@ -28,7 +28,8 @@ const routes: Routes = [
     RouterModule.forChild(routes),
     NgxDatatableModule,
     NgbModule,
-    NotifierModule
+    NotifierModule,
+    ReactiveFormsModule
   ],
   declarations: [ProductComponent]
 })

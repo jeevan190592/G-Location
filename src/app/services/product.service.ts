@@ -1,7 +1,14 @@
 import {Injectable} from '@angular/core';
 import {Observable} from 'rxjs';
-import {Products} from '../models';
-import {AddProductEndpoint, DeleteProductEndpoint, LoginEndpoint, ProductEndpoint, UpdateProductEndpoint} from '../constants';
+import {Gallery, Products} from '../models';
+import {
+  AddProductEndpoint, DeleteImageEndpoint, DeleteMapLayoutEndpoint,
+  DeleteProductEndpoint, LoadGalleryEndpoint, LoadMapLayoutEndpoint,
+  LoginEndpoint,
+  ProductEndpoint,
+  UpdateProductEndpoint,
+  uploadImageEndpoint, uploadMapLayoutEndpoint
+} from '../constants';
 import {map} from 'rxjs/operators';
 import {HttpClient} from '@angular/common/http';
 
@@ -39,5 +46,19 @@ export class ProductService {
     const deleteProduct = DeleteProductEndpoint + '/' + product.id + '/' + product.store_id
     console.log(deleteProduct)
     return this.http.delete(deleteProduct, {responseType: 'text'});
+  }
+
+  uploadMapLayout(form: any): Observable<any> {
+    return this.http.post(uploadMapLayoutEndpoint, form, {responseType: 'text'});
+  }
+
+  loadMapLayout(storeID): Observable<Gallery[]> {
+    const endPoint = LoadMapLayoutEndpoint + '/' + storeID
+    return this.http.get<Gallery[]>(endPoint);
+  }
+
+  deleteMaplayout(storeID, imageID, name): Observable<string> {
+    const endPoint = DeleteMapLayoutEndpoint + '/' + imageID + '/' + storeID + '/' + name
+    return this.http.delete(endPoint, {responseType: 'text'});
   }
 }

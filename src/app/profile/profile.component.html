@@ -312,15 +312,6 @@
                            #newUserPhoneNo>
                   </div>
                 </div>
-                <div class="form-group" *ngIf="stores">
-                  <label class="col-sm-12">Select Store</label>
-                  <div class="col-sm-12">
-                    <select class="form-control form-control-line" (change)="changeStoreSelected($event.target)">
-                      <option value="">Select store</option>
-                      <option *ngFor="let storeItem of stores" [value]="storeItem.id">{{storeItem.name}}</option>
-                    </select>
-                  </div>
-                </div>
                 <div class="form-group">
                   <label class="col-sm-12">Role</label>
                   <div class="col-sm-12">
@@ -331,6 +322,16 @@
                     </select>
                   </div>
                 </div>
+                <div class="form-group" *ngIf="stores">
+                  <label class="col-sm-12">Select Store</label>
+                  <div class="col-sm-12">
+                    <select class="form-control form-control-line" [disabled]=freezeStore (change)="changeStoreSelected($event.target)">
+                      <option value="">Select store</option>
+                      <option *ngFor="let storeItem of stores" [value]="storeItem.id">{{storeItem.name}}</option>
+                    </select>
+                  </div>
+                </div>
+
                 <div class="form-group">
                   <div class="col-sm-12">
                     <button class="btn btn-success"

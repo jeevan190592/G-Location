@@ -17,7 +17,8 @@
                   <div class="col-md-12">
                     <form #formAddProduct>
                       <input type="text" class="form" placeholder="Product Name" name="p_name" #p_name> &nbsp;
-                      <input type="number" class="form" placeholder="Barcode" name="p_barcode" [value]=barcodeValue readonly="readonly" #p_barcode> &nbsp;
+                      <input type="number" class="form" placeholder="Barcode" name="p_barcode" [value]=barcodeValue
+                             readonly="readonly" #p_barcode> &nbsp;
                       <input type="number" class="form" placeholder="Weight" name="p_weight" #p_weight> &nbsp;
                       <input type="text" class="form" placeholder="Location" name="p_location" #p_location> &nbsp;
                       <input type="number" class="form" placeholder="Price" name="p_price" #p_price> &nbsp;
@@ -30,7 +31,7 @@
                         Add Product
                       </button>
                       <barcode-scanner-livestream-overlay
-                        [type]="['code_128', 'code_39', 'ean_8']"
+                        [type]="['code_128', 'ean', 'upc', 'upc_e', 'ean_8']"
                         (valueChanges)="onValueChanges($event)"
                         (started)="onStarted($event)"
                       ></barcode-scanner-livestream-overlay>
@@ -121,8 +122,50 @@
           </ngb-tab>
           <ngb-tab title="Map layout">
             <ng-template ngbTabContent>
-
               <br>
+              <div class="row">
+                <div class="col-12">
+                  <!-- Row -->
+                  <div class="row" *ngIf="showAddElements">
+                    <div class="form-group">
+                      <div class="col-md-12">
+                        <form #addMapLayoutForm [formGroup]="form" enctype="multipart/form-data"
+                              (ngSubmit)="onSubmit(title.value,description.value, addMapLayoutForm)">
+                          <input type="file" name="mapLayout" (change)="onChange($event)"/>
+                          <input type="text" class="form" placeholder="Title" name="title" #title> &nbsp;
+                          <input type="text" class="form" placeholder="Description" name="description" #description> &nbsp;
+                          <button class="btn btn-success" type="submit">Upload Layout</button>
+                        </form>
+                        <div *ngIf="successMessage" class="alert alert-success">{{ message }}</div>
+                        <div *ngIf="failMessage" class="alert alert-danger">{{ message }}</div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <br>
+              <div class="row">
+                <!-- column -->
+                <div class="col-lg-3 col-md-6 img-responsive" *ngFor="let item of items">
+                  <!-- Card -->
+                  <div class="card">
+                    <img class="card-img-top img-responsive" src="http://localhost:3000/{{item.filename}}" alt="Card image cap">
+                    <div class="card-body">
+                      <h4 class="card-title">{{item.title}}</h4>
+                      <p class="card-text">{{item.description}}</p>
+                      <div *ngIf="showAddElements">
+                        <button class="btn btn-danger" (click)="deleteImage(item.id, item.filename, item.title) ">Delete</button></div>
+                    </div>
+                  </div>
+                  <!-- Card -->
+                </div>
+                <div *ngIf="showMessage">
+                  <div class="card">
+                    <h3>No Map Layouts available for this store</h3>
+                  </div>
+                </div>
+                <!-- column -->
+              </div>
 
             </ng-template>
           </ngb-tab>

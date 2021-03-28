@@ -27,6 +27,7 @@ export class ProfileComponent implements OnInit {
   newUserRoleSelected: string;
   isAdmin: boolean;
   form: FormGroup;
+  freezeStore = false;
 
   constructor(private formBuilder: FormBuilder, private userService: UserService, private routes: Router) {
   }
@@ -212,6 +213,12 @@ export class ProfileComponent implements OnInit {
 
   changeRoleSelected(selectedRole: any) {
     this.newUserRoleSelected = selectedRole.value;
+    this.newUserStoreSelected = '0';
+    if (selectedRole.value === 'Admin') {
+      this.freezeStore = true;
+    } else {
+      this.freezeStore = false;
+    }
   }
 
 
@@ -221,26 +228,40 @@ export class ProfileComponent implements OnInit {
       this.message = 'Store information is mandatory';
       return;
     }
-    this.userService.addUser(userID, name, email, password, phoneno, this.newUserStoreSelected, this.newUserRoleSelected)
-      .subscribe((res) => {
-        if (res) {
-          if (res === 'success') {
-            console.log(res);
-            this.successMessage = true;
-            this.failMessage = false;
-            this.message = 'User added successfully in database';
-            this.getUsers();
-            form.reset();
-          } else {
-            this.failMessage = true;
-            this.message = 'Failed to add user in database';
-          }
-          setTimeout(() => {
-            this.failMessage = false;
-            this.successMessage = false;
-          }, 4000);
+    if (userID) {
+      for (const user of this.userRows) {
+        if (user.username === userID) {
+          this.failMessage = true;
+          this.message = 'USER ID already available. Please use different one';
+          return;
         }
-      });
+      }
+    }
+    if (userID && name && email && password && phoneno) {
+      this.userService.addUser(userID, name, email, password, phoneno, this.newUserStoreSelected, this.newUserRoleSelected)
+        .subscribe((res) => {
+          if (res) {
+            if (res === 'success') {
+              console.log(res);
+              this.successMessage = true;
+              this.failMessage = false;
+              this.message = 'User added successfully in database';
+              this.getUsers();
+              form.reset();
+            } else {
+              this.failMessage = true;
+              this.message = 'Failed to add user in database';
+            }
+            setTimeout(() => {
+              this.failMessage = false;
+              this.successMessage = false;
+            }, 4000);
+          }
+        });
+    } else {
+      this.failMessage = true;
+      this.message = 'Please provide information in all fields';
+    }
   }
 
   addStore(name, phoneno, pincode, FB, Twitter, Youtube, address, form) {

@@ -1,11 +1,10 @@
-import {AfterViewInit, Component, OnInit, ViewChild} from '@angular/core';
+import {Component, OnInit, ViewChild} from '@angular/core';
 import {DatatableComponent} from '@swimlane/ngx-datatable';
-import {LoginService} from '../services/login.service';
 import {Router} from '@angular/router';
 import {ProductService} from '../services/product.service';
-import {Products} from '../models';
-import {NotifierService} from 'angular-notifier';
-import {BarcodeScannerLivestreamComponent, BarcodeScannerLivestreamOverlayComponent} from 'ngx-barcode-scanner';
+import {Gallery, Products} from '../models';
+import {BarcodeScannerLivestreamOverlayComponent} from 'ngx-barcode-scanner';
+import {FormBuilder, FormGroup} from '@angular/forms';
 
 declare var require: any;
 let data: any;
@@ -20,8 +19,12 @@ export class ProductComponent implements OnInit {
   failMessage = false;
   successMessage = false;
   showAddElements = true;
+  form: FormGroup;
+  items: Gallery[];
+  showMessage = false;
 
-  constructor(private productService: ProductService, private routes: Router) {
+
+  constructor(private formBuilder: FormBuilder, private productService: ProductService, private routes: Router) {
   }
 
 
@@ -38,7 +41,13 @@ export class ProductComponent implements OnInit {
   barcodeScannerOverlay: BarcodeScannerLivestreamOverlayComponent;
 
   barcodeValue: string;
+  value: string;
+  isError = false;
 
+  onError(error) {
+    console.error(error);
+    this.isError = true;
+  }
   startBarcodeScannerOverlay(): void {
     this.barcodeScannerOverlay.show();
   }
@@ -60,6 +69,10 @@ export class ProductComponent implements OnInit {
       this.storeID = localStorage.getItem('storeID');
       this.storeName = localStorage.getItem('storeName');
       this.loadProducts();
+      this.loadMapLayout(this.storeID);
+      this.form = this.formBuilder.group({
+        mapLayout: ['']
+      });
     } else {
       this.routes.navigate(['/search']);
     }
@@ -180,5 +193,66 @@ export class ProductComponent implements OnInit {
 
   }
 
+  onChange(event) {
+    if (event.target.files.length > 0) {
+      const file = event.target.files[0];
+      this.form.get('mapLayout').setValue(file);
+    }
+  }
 
+  onSubmit(title, description, form) {
+    const formData = new FormData();
+    formData.append('file', this.form.get('mapLayout').value);
+    formData.append('storeID', localStorage.getItem('storeID'));
+    formData.append('title', title);
+    formData.append('description', description);
+
+    this.productService.uploadMapLayout(formData).subscribe(
+      (res) => {
+        if (res === 'success') {
+          this.loadMapLayout(this.storeID);
+          form.reset();
+          this.successMessage = true;
+          this.message = 'Map Layout uploaded successfully in database';
+        } else {
+          this.failMessage = true;
+          this.message = 'Failed to upload map Layout in database';
+        }
+        setTimeout(() => {
+          this.failMessage = false;
+          this.successMessage = false;
+        }, 3000);
+      });
+  }
+
+  loadMapLayout(storeID) {
+    this.productService.loadMapLayout(storeID).subscribe((mapLayouts: Gallery[]) => {
+      if (mapLayouts.length !== 0) {
+        this.items = mapLayouts;
+        this.showMessage = false;
+      } else {
+        this.items = [];
+        this.showMessage = true;
+      }
+    });
+  }
+
+  deleteImage(imageID, name, title) {
+    if (confirm('Are you sure to delete ' + title)) {
+      this.productService.deleteMaplayout(this.storeID, imageID, name).subscribe((res: string) => {
+        if (res === 'success') {
+          this.loadMapLayout(this.storeID);
+          this.successMessage = true;
+          this.message = 'Map Layout deleted successfully in database';
+        } else {
+          this.failMessage = true;
+          this.message = 'Failed to delete Map Layout in database';
+        }
+        setTimeout(() => {
+          this.failMessage = false;
+          this.successMessage = false;
+        }, 3000);
+      });
+    }
+  }
 }

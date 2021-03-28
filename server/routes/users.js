@@ -5,8 +5,6 @@ const mySqlConnection = require("../connection");
 const multer = require('multer')
 const fs = require('fs');
 
-
-// Gallery
 const storage = multer.diskStorage({
   destination: function (req, file, cb) {
     cb(null, "uploads")
@@ -18,7 +16,48 @@ const storage = multer.diskStorage({
 
 const upload = multer({storage})
 
+// Map Layout
 
+Router.post("/uploadMapLayout", cors(), upload.single("file"), (req, res) => {
+  var body = req.body
+  const file = req.file;
+  if (file) {
+    mySqlConnection.query("INSERT into mapLayout(title,description,storeID,filename) values(?, ?, ?, ?)",
+      [body.title, body.description, body.storeID, req.file.filename], (err, rows, fields) => {
+        if (!err) {
+          res.send('success');
+        } else {
+          res.send('Error');
+          console.log(err)
+        }
+      })
+  } else {
+    res.send('Error');
+  }
+})
+
+Router.get("/loadMapLayout/:id", (req, res) => {
+  mySqlConnection.query("SELECT * from mapLayout where storeID = ?",[req.params.id], (err, rows, fields) => {
+    if (!err) {
+      res.send(rows);
+    } else {
+      console.log(err);
+    }
+  })
+})
+
+Router.delete("/deleteMapLayout/:id/:storeid/:name", (req, res) => {
+  mySqlConnection.query('DELETE from mapLayout where id =? and storeID =?', [req.params.id, req.params.storeid], (err, rows, fields) => {
+    if (!err) {
+      fs.unlinkSync(`uploads/${req.params.name}`);
+      res.send('success');
+    } else {
+      res.send('error');
+      console.log(err);
+    }
+  })
+})
+// Gallery
 
 Router.post("/upload", cors(), upload.single("file"), (req, res) => {
   var body = req.body
